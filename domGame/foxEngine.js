@@ -476,6 +476,15 @@ function _foxEngine()
 			this.pos_x = x;
 			this.pos_y = y;
 		}
+
+		/*
+		 * @desc Move this object instance by amount (x,y)
+		 */
+		this.moveOffset = function(x, y)
+		{
+			this.pos_x += x;
+			this.pos_y += y;
+		}
 	}
 	this.Moveable.prototype = componentObj; // Moveable extends Component
 	var moveableObj = new this.Moveable();
@@ -540,6 +549,22 @@ function _foxEngine()
 		this.setZIndex = function(zIndex)
 		{
 			this.node.style.zIndex = zIndex;
+		}
+
+		/*
+		 * @desc Hide image from view
+		 */
+		this.hide = function()
+		{
+			this.node.style.display = "none";
+		}
+
+		/*
+		 * @desc Show image in view
+		 */
+		this.show = function()
+		{
+			this.node.style.display = "inline";
 		}
 	}
 	this.Image.prototype = moveableObj; // Image extends Moveable
