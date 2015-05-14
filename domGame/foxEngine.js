@@ -2,6 +2,9 @@ function _foxEngine()
 {
 	// Public fields
 	this.delta_t = 40;
+	this.typeComponentMap = {};
+	this.updateInterval;
+	this.lastId = 0;
 
 	// Private fields
 	var frame;
@@ -11,6 +14,7 @@ function _foxEngine()
 	var keyEvents = {};
 	var keysDown = {};
 	var components = [];
+	var collisionEvents = [];
 	var scroll;
 
 	/*
@@ -41,7 +45,7 @@ function _foxEngine()
 		frame.x = frame.getBoundingClientRect().top;
 		frame.y = frame.getBoundingClientRect().left;
 
-		setInterval(this.update, this.delta_t);
+		this.updateInterval = setInterval(this.update, this.delta_t);
 
 		window.onkeydown = function(e) {
 			keysDown[e.keyCode] = true;
@@ -65,10 +69,43 @@ function _foxEngine()
 	/*
 	 * @desc Add a Component to the engine
 	 */
-	this.addComponent = function(obj)
+	this.addComponent = function(component)
 	{
-		obj.node.style.display="inline";
-		components.push(obj);
+		component.node.style.display="inline";
+		component.componentId = this.getNextId();
+		components.push(component);
+	}
+
+	/*
+	 * @desc Remove a Component from the engine
+	 */
+	this.removeComponent = function(component)
+	{
+		// Hide
+		component.node.style.display="none";
+
+		// Remove from components list
+		var i = 0;
+		for(; i < components.length; i++) {
+			if(components[i].componentId == component.componentId) {
+				components.splice(i, 1);
+				break;
+			}
+		}
+
+		// Remove from type component map
+		if(component.type != null && component.type in engine.typeComponentMap) {
+			var i = 0;
+			for(; i < engine.typeComponentMap[component.type].length; i++) {
+				if(component.componentId == engine.typeComponentMap[component.type][i].componentId) {
+					engine.typeComponentMap[component.type].splice(i, 1);
+					break;
+				}
+			}
+		}
+
+		// Free memory
+		delete component;
 	}
 
 	/*
@@ -91,11 +128,19 @@ function _foxEngine()
 	}
 
 	/*
-	 * @desc Add key down handler
+	 * @desc Add key pressed handler
 	 */
-	this.keyDown = function(key, callback)
+	this.addKeyEvent = function(key, callback)
 	{
 		keyEvents[key] = callback;
+	}
+
+	/*
+	 * @desc Add collision event handler
+	 */
+	this.addCollisionEvent = function(type1, type2, handler)
+	{
+		collisionEvents.push({type1: type1, type2: type2, handler: handler});
 	}
 
 	/*
@@ -106,6 +151,20 @@ function _foxEngine()
 		// Update components
 		for(i=0; i < components.length; i++) {
 			components[i].update();
+		}
+
+		// Detect collisions
+		for(i=0; i < collisionEvents.length; i++) {
+			var evt = collisionEvents[i];
+			for(j=0; j < engine.typeComponentMap[evt.type1].length; j++) {
+				var component1 = engine.typeComponentMap[evt.type1][j];
+				for(k=0; k < engine.typeComponentMap[evt.type2].length; k++) {
+					var component2 = engine.typeComponentMap[evt.type2][k];
+					if(testCollision(component1, component2)) {
+						evt.handler(component1, component2);
+					}
+				}
+			}
 		}
 
 		// Perform key events
@@ -127,7 +186,16 @@ function _foxEngine()
 	}
 
 	/*
-	 * @desc get full width of scrollable background
+	 * @desc Get next unique ID
+	 */
+	this.getNextId = function()
+	{
+		this.lastId += 1;
+		return this.lastId;
+	}
+
+	/*
+	 * @desc Get full width of scrollable background
 	 * 	(or width of frame if no scrollable background)
 	 */
 	function getFullWidth()
@@ -138,7 +206,7 @@ function _foxEngine()
 	}
 
 	/*
-	 * @desc get full height of scrollable background
+	 * @desc Get full height of scrollable background
 	 * 	(or height of frame if no scrollable background)
 	 */
 	function getFullHeight()
@@ -146,6 +214,33 @@ function _foxEngine()
 		if(scroll)
 			return scroll.scrollObj.getHeight();
 		return frame.height;
+	}
+
+	/*
+	 * @desc Test collision between two components
+	 */
+	function testCollision(component1, component2)
+	{
+		var corners1 = component1.getCorners();
+		var corners2 = component2.getCorners();
+		for(corner in corners1)
+			if(isPointInBox(corners1[corner], corners2))
+				return true;
+		for(corner in corners2)
+			if(isPointInBox(corners2[corner], corners1))
+				return true;
+		return false;
+	}
+
+	/*
+	 * @desc Test if point {x, y} is inside of box {topLeft, topRight, bottomLeft, bottomRight}
+	 */
+	function isPointInBox(point, box)
+	{
+		return (point.x >= box.topLeft.x &&
+			point.x <= box.topRight.x &&
+			point.y >= box.topLeft.y &&
+			point.y <= box.bottomLeft.y);
 	}
 
 	/*
@@ -159,6 +254,7 @@ function _foxEngine()
 		this.x = 0;
 		this.y = 0;
 		this.fixed = false;
+		this.type = null;
 
 		this.setSize = function(width, height)
 		{
@@ -174,11 +270,35 @@ function _foxEngine()
 			this.node.style.top = Math.round(y) + (this.fixed ? 0 : bg_y) + "px";
 		}
 
+		this.setType = function(type)
+		{
+			if(this.type != null)
+			{
+				alert("Error: type already set for this object");
+				return;
+			}
+			this.type = type;
+			if(!(type in engine.typeComponentMap))
+				engine.typeComponentMap[type] = [];
+			engine.typeComponentMap[type].push(this);
+		}
+
 		this.getPosition = function()
 		{
 			if(this.fixed)
 				return {x: this.x - bg_x, y: this.y - bg_y};
 			return {x: this.x, y:this.y};
+		}
+
+		this.getCorners = function()
+		{
+			var pos = this.getPosition();
+			return {
+				topLeft: {x: pos.x, y: pos.y},
+				topRight: {x: pos.x + this.getWidth(), y: pos.y},
+				bottomLeft: {x: pos.x, y: pos.y + this.getHeight()},
+				bottomRight: {x: pos.x + this.getWidth(), y: pos.y + this.getHeight()},
+			}
 		}
 
 		this.getWidth = function()
@@ -198,6 +318,14 @@ function _foxEngine()
 
 		this.update = function()
 		{
+		}
+
+		/*
+		 * @desc Remove this Component from the engine
+		 */
+		this.remove = function()
+		{
+			engine.removeComponent(this);
 		}
 	}
 	var componentObj = new this.Component();
@@ -403,6 +531,15 @@ function _foxEngine()
 		this.faceLeft = function()
 		{
 			this.node.src = this.faceLeftSrc;
+		}
+
+		/*
+		 * @desc Set z-index of object (higher number => more forward)
+		 * @param {int} zindex
+		 */
+		this.setZIndex = function(zIndex)
+		{
+			this.node.style.zIndex = zIndex;
 		}
 	}
 	this.Image.prototype = moveableObj; // Image extends Moveable
