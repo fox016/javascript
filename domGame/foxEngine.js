@@ -499,6 +499,15 @@ function _foxEngine()
 		}
 
 		/*
+		 * @desc If Y velocty and acceleration are positive, kill them
+		 */
+		this.stopDown = function()
+		{
+			this.vel_y = Math.min(0, this.vel_y);
+			this.acc_y = Math.min(0, this.acc_y);
+		}
+
+		/*
 		 * @desc Apply (or remove) gravity to this object instance
 		 * @param isGravity {bool}
 		 */
@@ -517,9 +526,9 @@ function _foxEngine()
 		}
 
 		/*
-		 * @desc Places component right on top of other component
+		 * @desc Places component directly above other component
 		 */
-		this.placeOnTop = function(otherComponent)
+		this.placeAbove = function(otherComponent)
 		{
 			this.pos_y = otherComponent.y - this.getHeight();
 		}

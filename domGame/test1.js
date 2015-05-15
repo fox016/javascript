@@ -34,9 +34,13 @@ function buildEnemies()
 	// TODO make pigs bounce off background boundaries
 	var enemies = [];
 	var dir = 1;
+	var positions = [];
 	for(var i = 0; i < 10; i++)
-	{
-		var enemy = new foxEngine.Image("images/pig_left.png", 60, 40, i*200+100, 300);
+		positions.push({x: i*200+100, y:300});
+	positions.push({x: 1550, y:34});
+	positions.push({x: 1550, y:34});
+	for(var i = 0; i < positions.length; i++) {
+		var enemy = new foxEngine.Image("images/pig_left.png", 60, 40, positions[i].x, positions[i].y);
 		enemy.setHFlipImages("images/pig_right.png", "images/pig_left.png");
 		enemy.setType("enemy");
 		enemy.friction = 0.0;
@@ -166,7 +170,7 @@ function platformCollision(component, platform)
 {
 	if(component.isDirectlyAbove(platform))
 	{
-		component.stopY();
-		component.placeOnTop(platform);
+		component.stopDown();
+		component.placeAbove(platform);
 	}
 }
