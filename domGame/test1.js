@@ -10,8 +10,7 @@ window.onload = function()
 	foxEngine.scrollToFollow(background, player);
 	setKeyEvents(player);
 	var enemies = buildEnemies();
-
-	// TODO add platforms
+	var platforms = buildPlatforms();
 }
 
 /*
@@ -32,6 +31,7 @@ function buildPlayer()
  */
 function buildEnemies()
 {
+	// TODO make pigs bounce off background boundaries
 	var enemies = [];
 	var dir = 1;
 	for(var i = 0; i < 10; i++)
@@ -50,6 +50,25 @@ function buildEnemies()
 	}
 	foxEngine.addCollisionEvent("player", "enemy", playerEnemyCollision);
 	return enemies;
+}
+
+/*
+ * @desc Build and return a list of platform objects
+ */
+function buildPlatforms()
+{
+	var platforms = [];
+	var y = 450;
+	for(var i = 0; i < 8; i++)
+	{
+		var platform = new foxEngine.Image("images/platform.png", 150, 20, i*200+100, y);
+		y -= 50;
+		platform.setType("platform");
+		platforms.push(platform);
+	}
+	foxEngine.addCollisionEvent("player", "platform", platformCollision);
+	foxEngine.addCollisionEvent("enemy", "platform", platformCollision);
+	return platforms;
 }
 
 /*
@@ -138,4 +157,16 @@ function playerGoalCollision(player, goal)
 {
 	goal.remove();
 	buildEndMessage("images/you_win.png");
+}
+
+/*
+ * @desc Called when certain components and platforms collide
+ */
+function platformCollision(component, platform)
+{
+	if(component.isDirectlyAbove(platform))
+	{
+		component.stopY();
+		component.placeOnTop(platform);
+	}
 }

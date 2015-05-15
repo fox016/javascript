@@ -517,6 +517,14 @@ function _foxEngine()
 		}
 
 		/*
+		 * @desc Places component right on top of other component
+		 */
+		this.placeOnTop = function(otherComponent)
+		{
+			this.pos_y = otherComponent.y - this.getHeight();
+		}
+
+		/*
 		 * @desc Move this object instance by amount (x,y)
 		 */
 		this.moveOffset = function(x, y)
