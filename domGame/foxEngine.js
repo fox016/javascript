@@ -13,7 +13,7 @@ function _foxEngine()
 	var engine = this;
 	var keyEvents = {};
 	var keysDown = {};
-	var components = [];
+	var components = {};
 	var collisionEvents = [];
 	var scroll;
 
@@ -66,8 +66,9 @@ function _foxEngine()
 	{
 		clearInterval(this.updateInterval);
 		this.updateInterval = null;
-		while(components.length != 0)
-			this.removeComponent(components[components.length-1]);
+		this.typeComponentMap = {};
+		for(componentId in components)
+			this.removeComponent(components[componentId]);
 
 		this.lastId = 0;
 		frame = null;
@@ -93,7 +94,7 @@ function _foxEngine()
 		frame.appendChild(component.node);
 		component.node.style.display="inline";
 		component.componentId = this.getNextId();
-		components.push(component);
+		components[component.componentId] = component;
 	}
 
 	/*
@@ -105,13 +106,7 @@ function _foxEngine()
 		component.node.style.display="none";
 
 		// Remove from components list
-		var i = 0;
-		for(; i < components.length; i++) {
-			if(components[i].componentId == component.componentId) {
-				components.splice(i, 1);
-				break;
-			}
-		}
+		delete components[component.componentId];
 
 		// Remove from type component map
 		if(component.type != null && component.type in engine.typeComponentMap) {
@@ -170,9 +165,8 @@ function _foxEngine()
 	this.update = function()
 	{
 		// Update components
-		for(i=0; i < components.length; i++) {
-			components[i].update();
-		}
+		for(componentId in components)
+			components[componentId].update();
 
 		// Detect collisions
 		for(i=0; i < collisionEvents.length; i++) {
