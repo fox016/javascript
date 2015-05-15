@@ -431,7 +431,7 @@ function _foxEngine()
 		this.friction = 0.2;
 		this.vel_margin = 5.0; // If velocity is within vel_margin of 0, consider velocity to be 0
 		this.vel_max_x = 500;
-		this.vel_max_y = 1000;
+		this.vel_max_y = 600;
 
 		this.isGravity = false;
 		this.gravity = 1000;

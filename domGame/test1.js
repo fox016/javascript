@@ -16,6 +16,7 @@ function loadEngine()
 	var enemies = buildEnemies();
 	var platforms = buildPlatforms();
 	setBorderCollisions();
+	// TODO add timer (or time limit)
 }
 
 /*
@@ -189,20 +190,18 @@ function playerGoalCollision(player, goal)
  */
 function platformCollision(component, platform)
 {
-	if(component.isDirectlyAbove(platform))
-	{
+	if(component.isDirectlyAbove(platform) && component.vel_y >= 0) {
 		component.stopDown();
 		component.placeAbove(platform);
 	}
 }
 
 /*
- * @desc Define components actions upon border collision
+ * @desc Define components' actions upon border collision
  */
 function setBorderCollisions()
 {
 	foxEngine.addCollisionEvent("player", "borderBottom", function(player, border) {
 		player.stopDown();
-		player.placeAbove(border);
 	});
 }
