@@ -45,6 +45,8 @@ function _foxEngine()
 		frame.x = frame.getBoundingClientRect().top;
 		frame.y = frame.getBoundingClientRect().left;
 
+		makeBorderObjects();
+
 		this.updateInterval = setInterval(this.update, this.delta_t);
 
 		window.onkeydown = function(e) {
@@ -259,6 +261,51 @@ function _foxEngine()
 	}
 
 	/*
+	 * @desc Make the 4 borders of the world
+	 */
+	function makeBorderObjects()
+	{
+		var borderBottom = makeBorderObject("borderBottom");
+		var borderTop = makeBorderObject("borderTop");
+		var borderLeft = makeBorderObject("borderLeft");
+		var borderRight = makeBorderObject("borderRight");
+
+		borderBottom.update = function() {
+			this.setComponentPosition(0, getFullHeight());
+			this.setSize(getFullWidth(), 1);
+		}
+
+		borderTop.setComponentPosition(0, 0);
+		borderTop.update = function() {
+			this.setSize(getFullWidth(), 1);
+		}
+
+		borderLeft.setComponentPosition(0, 0);
+		borderLeft.update = function() {
+			this.setSize(1, getFullHeight());
+		}
+
+		borderRight.update = function() {
+			this.setComponentPosition(getFullWidth(), 0);
+			this.setSize(1, getFullHeight());
+		}
+	}
+
+	/*
+	 * @desc Initialize fields for a border object
+	 * @param {string} type
+	 */
+	function makeBorderObject(type)
+	{
+		var borderObj = new engine.Component();
+		borderObj.node = document.createElement("div");
+		borderObj.node.style.position = "absolute";
+		borderObj.setType(type);
+		engine.addComponent(borderObj);
+		return borderObj;
+	}
+
+	/*
 	 * Component class
 	 * @class module:foxEngine.Component
 	 * @classdesc A base class that contains basic functionality common to 
@@ -406,12 +453,12 @@ function _foxEngine()
 			this.pos_x += (this.vel_x * t);
 			this.pos_y += (this.vel_y * t);
 
-			// If trying to go out of range, kill velocity and acceleration
+			// If trying to go out of range, call onHitVerticalBorder handler
 			var boundX = engine.getBoundedValue(this.pos_x, 0, getFullWidth() - this.getWidth());
 			if(boundX != this.pos_x)
 			{
 				this.pos_x = boundX;
-				this.stopX();
+				this.onHitVerticalBorder();
 			}
 			var boundY = engine.getBoundedValue(this.pos_y, 0, getFullHeight() - this.getHeight());
 			if(boundY != this.pos_y)
@@ -523,6 +570,33 @@ function _foxEngine()
 		}
 
 		/*
+		 * @desc Reverse velocity and acceleration in X direction
+		 */
+		this.reverseX = function()
+		{
+			this.vel_x *= -1;
+			this.acc_x *= -1;
+		}
+
+		/*
+		 * @desc Reverse velocity and acceleration in Y direction
+		 */
+		this.reverseY = function()
+		{
+			this.vel_y *= -1;
+			this.acc_y *= -1;
+		}
+
+		/*
+		 * @desc Defines what happens when this object hits a vertical border
+		 * @default Kill velocity and acceleration in X direction
+		 */
+		this.onHitVerticalBorder = function()
+		{
+			this.stopX();
+		}
+
+		/*
 		 * @desc Apply (or remove) gravity to this object instance
 		 * @param {bool} isGravity
 		 */
@@ -579,6 +653,9 @@ function _foxEngine()
 		if(typeof yPos == "undefined")
 			yPos = 0;
 
+		var RIGHT = 0;
+		var LEFT = 1;
+
 		this.faceRightSrc = src;
 		this.faceLeftSrc = src;
 		this.node = new Image();
@@ -589,6 +666,8 @@ function _foxEngine()
 
 		this.setPosition(xPos, yPos);
 		this.setComponentPosition(xPos, yPos);
+
+		this.direction = LEFT;
 
 		engine.addComponent(this);
 
@@ -608,6 +687,7 @@ function _foxEngine()
 		 */
 		this.faceRight = function()
 		{
+			this.direction = RIGHT;
 			this.node.src = this.faceRightSrc;
 		}
 
@@ -616,7 +696,19 @@ function _foxEngine()
 		 */
 		this.faceLeft = function()
 		{
+			this.direction = LEFT;
 			this.node.src = this.faceLeftSrc;
+		}
+
+		/*
+		 * @desc Face object in the opposite direction (see setHFlipImages function)
+		 */
+		this.hFlip = function()
+		{
+			if(this.direction == LEFT)
+				this.faceRight();
+			else
+				this.faceLeft();
 		}
 
 		/*

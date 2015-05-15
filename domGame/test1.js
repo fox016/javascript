@@ -15,6 +15,7 @@ function loadEngine()
 	setKeyEvents(player);
 	var enemies = buildEnemies();
 	var platforms = buildPlatforms();
+	setBorderCollisions();
 }
 
 /*
@@ -44,7 +45,6 @@ function buildPlayer()
  */
 function buildEnemies()
 {
-	// TODO make pigs bounce off background boundaries
 	var enemies = [];
 	var dir = 1;
 	var positions = [];
@@ -64,6 +64,10 @@ function buildEnemies()
 		dir *= -1;
 		enemy.applyGravity(true);
 		enemy.setZIndex(800);
+		enemy.onHitVerticalBorder = function() {
+			this.reverseX();
+			this.hFlip();
+		};
 		enemies.push(enemy);
 	}
 	foxEngine.addCollisionEvent("player", "enemy", playerEnemyCollision);
@@ -135,14 +139,13 @@ function setKeyEvents(targetObj)
 	});
 
 	// Jump
-	// TODO instead of jump timer, allow player to jump whenever standing on an object
 	var jumpFlag = true;
-	var jumpTimer = 1000; // Wait time between jumps (in ms)
-	var jumpForce = 120000;
+	var jumpTimer = 200; // Wait time between jumps (in ms)
+	var jumpForce = -120000;
 	foxEngine.addKeyEvent(UP_KEY, function() {
-		if(jumpFlag)
+		if(targetObj.acc_y == 0 && jumpFlag)
 		{
-			targetObj.pushY(-1 * jumpForce);
+			targetObj.pushY(jumpForce);
 			jumpFlag = false;
 			setTimeout(function() { jumpFlag = true; }, jumpTimer);
 		}
@@ -191,4 +194,15 @@ function platformCollision(component, platform)
 		component.stopDown();
 		component.placeAbove(platform);
 	}
+}
+
+/*
+ * @desc Define components actions upon border collision
+ */
+function setBorderCollisions()
+{
+	foxEngine.addCollisionEvent("player", "borderBottom", function(player, border) {
+		player.stopDown();
+		player.placeAbove(border);
+	});
 }
