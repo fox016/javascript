@@ -10,6 +10,8 @@ window.onload = function()
 	foxEngine.scrollToFollow(background, player);
 	setKeyEvents(player);
 	var enemies = buildEnemies();
+
+	// TODO add platforms
 }
 
 /*
@@ -34,7 +36,7 @@ function buildEnemies()
 	var dir = 1;
 	for(var i = 0; i < 10; i++)
 	{
-		var enemy = new foxEngine.Image("images/pig_left.png", 60, 40);
+		var enemy = new foxEngine.Image("images/pig_left.png", 60, 40, i*200+100, 300);
 		enemy.setHFlipImages("images/pig_right.png", "images/pig_left.png");
 		enemy.setType("enemy");
 		enemy.friction = 0.0;
@@ -43,7 +45,6 @@ function buildEnemies()
 		if(dir > 0)
 			enemy.faceRight();
 		dir *= -1;
-		enemy.setPosition(i * 200 + 100, 300);
 		enemy.applyGravity(true);
 		enemies.push(enemy);
 	}
@@ -56,8 +57,7 @@ function buildEnemies()
  */
 function buildGoal()
 {
-	var goal = new foxEngine.Image("images/flag.png", 32, 32);
-	goal.setPosition(2300, 350);
+	var goal = new foxEngine.Image("images/flag.png", 32, 32, 2300, 350);
 	goal.setType("goal");
 	goal.setZIndex(900);
 	foxEngine.addCollisionEvent("player", "goal", playerGoalCollision);
@@ -67,14 +67,14 @@ function buildGoal()
 /*
  * @desc Build and return win message object
  */
-function buildWinMessage()
+function buildEndMessage(imgSrc)
 {
-	var winMessage = new foxEngine.Image(
-		"http://ajournalofmusicalthings.com/wp-content/uploads/YouWin.png",
-		200, 200);
-	winMessage.setPosition(100, 100);
-	winMessage.fixed = true;
-	return winMessage;
+	var width = 200; var height = 200;
+	var xPos = foxEngine.getWidth() / 2 - width / 2;
+	var yPos = foxEngine.getHeight() / 2 - height / 2;
+	var endMessage = new foxEngine.Image(imgSrc, width, height, xPos, yPos);
+	endMessage.fixed = true;
+	return endMessage;
 }
 
 /*
@@ -94,6 +94,7 @@ function setKeyEvents(targetObj)
 	});
 
 	// Jump
+	// TODO instead of jump timer, allow player to jump whenever standing on an object
 	var jumpFlag = true;
 	var jumpTimer = 1000; // Wait time between jumps (in ms)
 	var jumpForce = 120000;
@@ -109,15 +110,25 @@ function setKeyEvents(targetObj)
 
 /*
  * @desc Called when a player and an enemy collide
- * TODO improve so that enemies die if jumped on, otherwise the player dies
  */
 function playerEnemyCollision(player, enemy)
 {
-	enemy.remove();
+	if(player.isDirectlyAbove(enemy))
+	{
+		enemy.remove();
+		player.stopY();
+		player.pushY(-1 * 40000);
 
-	// Show flag if all enemies are gone
-	if(foxEngine.typeComponentMap['enemy'].length == 0)
-		buildGoal();
+		// Show flag if all enemies are gone
+		if(foxEngine.typeComponentMap['enemy'].length == 0)
+			buildGoal();
+	}
+
+	else
+	{
+		player.remove();
+		buildEndMessage("images/you_lose.jpg");
+	}
 }
 
 /*
@@ -126,5 +137,5 @@ function playerEnemyCollision(player, enemy)
 function playerGoalCollision(player, goal)
 {
 	goal.remove();
-	buildWinMessage();
+	buildEndMessage("images/you_win.png");
 }

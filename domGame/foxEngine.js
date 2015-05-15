@@ -270,11 +270,14 @@ function _foxEngine()
 			this.node.style.top = Math.round(y) + (this.fixed ? 0 : bg_y) + "px";
 		}
 
+		/*
+		 * @desc Sets the type of the Component and adds it to the typeComponentMap
+		 */
 		this.setType = function(type)
 		{
 			if(this.type != null)
 			{
-				alert("Error: type already set for this object");
+				alert("Error: type already set for this Component");
 				return;
 			}
 			this.type = type;
@@ -290,6 +293,9 @@ function _foxEngine()
 			return {x: this.x, y:this.y};
 		}
 
+		/*
+		 * @desc Calculates the (x,y) coordinates of the Component's four corners
+		 */
 		this.getCorners = function()
 		{
 			var pos = this.getPosition();
@@ -318,6 +324,20 @@ function _foxEngine()
 
 		this.update = function()
 		{
+		}
+
+		/*
+		 * @desc Returns true iff this Component is directly above the otherComponent
+		 */
+		this.isDirectlyAbove = function(otherComponent)
+		{
+			var thisCorners = this.getCorners();
+			var otherCorners = otherComponent.getCorners();
+			if(thisCorners.bottomLeft.y < otherCorners.bottomLeft.y) {
+				if(thisCorners.bottomRight.x > otherCorners.bottomLeft.x)
+					return thisCorners.bottomLeft.x < otherCorners.bottomRight.x;
+			}
+			return false;
 		}
 
 		/*
@@ -355,7 +375,7 @@ function _foxEngine()
 		this.gravity = 1000;
 
 		/*
-		 * Called every delta_t milliseconds, updates physics variables
+		 * @desc Called every delta_t milliseconds, updates physics variables
 		 */
 		this.update = function()
 		{
@@ -370,18 +390,22 @@ function _foxEngine()
 			// Update position
 			this.pos_x += (this.vel_x * t);
 			this.pos_y += (this.vel_y * t);
+
+			// If trying to go out of range, kill velocity and acceleration
 			var boundX = engine.getBoundedValue(this.pos_x, 0, getFullWidth() - this.getWidth());
 			if(boundX != this.pos_x)
 			{
 				this.pos_x = boundX;
-				this.vel_x = 0;
+				this.stopX();
 			}
 			var boundY = engine.getBoundedValue(this.pos_y, 0, getFullHeight() - this.getHeight());
 			if(boundY != this.pos_y)
 			{
 				this.pos_y = boundY;
-				this.vel_y = 0;
+				this.stopY();
 			}
+
+			// Set Component position
 			this.setComponentPosition(this.pos_x, this.pos_y);
 
 			// Reset forces
@@ -390,7 +414,7 @@ function _foxEngine()
 		}
 
 		/*
-		 * Apply a force in the X direction
+		 * @desc Apply a force in the X direction
 		 * @param {int} force - positive is right, negative is left
 		 */
 		this.pushX = function(force)
@@ -406,10 +430,7 @@ function _foxEngine()
 				if(Math.abs(force) >= Math.abs(fF))
 					this.acc_x = (force + fF) / this.mass;
 				else // If force not enough to overcome static friction
-				{
-					this.vel_x = 0;
-					this.acc_x = 0;
-				}
+					this.stopX();
 			}
 
 			// Kinetic friction
@@ -422,7 +443,7 @@ function _foxEngine()
 		}
 
 		/*
-		 * Apply a force in the Y direction
+		 * @desc Apply a force in the Y direction
 		 * @param {int} force - positive is down, negative is up
 		 */
 		this.pushY = function(force)
@@ -457,6 +478,24 @@ function _foxEngine()
 					fF *= -1; // Friction opposes direction of velocity
 				this.acc_y = (force + fF + fG) / this.mass;
 			}
+		}
+
+		/*
+		 * @desc Kill velocity and acceleration in the X direction
+		 */
+		this.stopX = function()
+		{
+			this.vel_x = 0;
+			this.acc_x = 0;
+		}
+
+		/*
+		 * @desc Kill velocity and acceleration in the Y direction
+		 */
+		this.stopY = function()
+		{
+			this.vel_y = 0;
+			this.acc_y = 0;
 		}
 
 		/*
@@ -497,12 +536,16 @@ function _foxEngine()
 	 * @param width {int} - (opt, default frame width) width of image
 	 * @param height {int} - (opt, default frame height) height of image
 	 */
-	this.Image = function(src, width, height)
+	this.Image = function(src, width, height, xPos, yPos)
 	{
 		if(typeof width == "undefined")
 			width = frame.width;
 		if(typeof height == "undefined")
 			height = frame.height;
+		if(typeof xPos == "undefined")
+			xPos = 0;
+		if(typeof yPos == "undefined")
+			yPos = 0;
 
 		this.faceRightSrc = src;
 		this.faceLeftSrc = src;
@@ -512,6 +555,10 @@ function _foxEngine()
 		this.node.ondragstart = function(){return false;};
 		this.node.width = width;
 		this.node.height = height;
+
+		this.setPosition(xPos, yPos);
+		this.setComponentPosition(xPos, yPos);
+
 		frame.appendChild(this.node);
 		engine.addComponent(this);
 
