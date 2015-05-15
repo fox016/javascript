@@ -60,6 +60,25 @@ function _foxEngine()
 	}
 
 	/*
+	 * @desc Destroy 
+	 */
+	this.destroy = function()
+	{
+		clearInterval(this.updateInterval);
+		this.updateInterval = null;
+		while(components.length != 0)
+			this.removeComponent(components[components.length-1]);
+
+		this.lastId = 0;
+		frame = null;
+		bg_x = 0;
+		bg_y = 0;
+		keyEvents = {};
+		collisionEvents = [];
+		scroll = null;
+	}
+
+	/*
 	 * Getters
 	 */
 	this.getHeight = function() { return frame.height; }
@@ -71,6 +90,7 @@ function _foxEngine()
 	 */
 	this.addComponent = function(component)
 	{
+		frame.appendChild(component.node);
 		component.node.style.display="inline";
 		component.componentId = this.getNextId();
 		components.push(component);
@@ -105,6 +125,7 @@ function _foxEngine()
 		}
 
 		// Free memory
+		frame.removeChild(component.node);
 		delete component;
 	}
 
@@ -258,8 +279,8 @@ function _foxEngine()
 
 		this.setSize = function(width, height)
 		{
-			this.node.width = width;
-			this.node.height = height;
+			this.node.style.width = width;
+			this.node.style.height = height;
 		}
 
 		this.setComponentPosition = function(x, y)
@@ -509,7 +530,7 @@ function _foxEngine()
 
 		/*
 		 * @desc Apply (or remove) gravity to this object instance
-		 * @param isGravity {bool}
+		 * @param {bool} isGravity
 		 */
 		this.applyGravity = function(isGravity)
 		{
@@ -549,9 +570,9 @@ function _foxEngine()
 	 * Image Class
 	 * @class module:foxEngine.Image
 	 * @extends module:foxEngine.Moveable
-	 * @param src {string} - classpath of image source
-	 * @param width {int} - (opt, default frame width) width of image
-	 * @param height {int} - (opt, default frame height) height of image
+	 * @param {string} src - classpath of image source
+	 * @param {int} width - (opt, default frame width) width of image
+	 * @param {int} height - (opt, default frame height) height of image
 	 */
 	this.Image = function(src, width, height, xPos, yPos)
 	{
@@ -570,13 +591,11 @@ function _foxEngine()
 		this.node.src = src;
 		this.node.style.position = "absolute";
 		this.node.ondragstart = function(){return false;};
-		this.node.width = width;
-		this.node.height = height;
+		this.setSize(width, height);
 
 		this.setPosition(xPos, yPos);
 		this.setComponentPosition(xPos, yPos);
 
-		frame.appendChild(this.node);
 		engine.addComponent(this);
 
 		/*
@@ -632,6 +651,41 @@ function _foxEngine()
 		}
 	}
 	this.Image.prototype = moveableObj; // Image extends Moveable
+
+	/*
+	 * Button Class
+	 * @class module:foxEngine.Button
+	 * @extends modle:foxEngine.Component
+	 * @param {string} text
+	 * @param {function} handler
+	 * @param {int} width - (opt, default 100)
+	 * @param {int} height - (opt, default 30)
+	 * @param {int} xPos - (opt, default 0)
+	 * @param {int} yPos - (opt, default 0)
+	 */
+	this.Button = function(text, handler, width, height, xPos, yPos, fixed)
+	{
+		if(typeof width == "undefined")
+			width = 100;
+		if(typeof height == "undefined")
+			height = 30;
+		if(typeof xPos == "undefined")
+			xPos = 0;
+		if(typeof yPos == "undefined")
+			yPos = 0;
+		if(typeof fixed == "undefined")
+			fixed = false;
+
+		this.node = document.createElement('button');
+		this.node.innerHTML = text;
+		this.node.style.position = "absolute";
+		this.node.onclick = handler;
+		this.setSize(width, height);
+		this.fixed = fixed;
+		this.setComponentPosition(xPos, yPos);
+		engine.addComponent(this);
+	}
+	this.Button.prototype = componentObj;
 }
 
 /** @global */

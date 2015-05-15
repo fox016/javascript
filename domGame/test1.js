@@ -1,8 +1,12 @@
-/*
- * Initialize foxEngine
- * Called once window is ready to process changes
- */
 window.onload = function()
+{
+	loadEngine();
+}
+
+/*
+ * @desc Initialize foxEngine and build game
+ */
+function loadEngine()
 {
 	foxEngine.open("target", 800, 500);
 	var background = new foxEngine.Image("images/field.jpg", 2500, foxEngine.getHeight());
@@ -11,6 +15,15 @@ window.onload = function()
 	setKeyEvents(player);
 	var enemies = buildEnemies();
 	var platforms = buildPlatforms();
+}
+
+/*
+ * @desc Reset engine and game
+ */
+function reset()
+{
+	foxEngine.destroy();
+	loadEngine();
 }
 
 /*
@@ -50,6 +63,7 @@ function buildEnemies()
 			enemy.faceRight();
 		dir *= -1;
 		enemy.applyGravity(true);
+		enemy.setZIndex(800);
 		enemies.push(enemy);
 	}
 	foxEngine.addCollisionEvent("player", "enemy", playerEnemyCollision);
@@ -80,7 +94,7 @@ function buildPlatforms()
  */
 function buildGoal()
 {
-	var goal = new foxEngine.Image("images/flag.png", 32, 32, 2300, 350);
+	var goal = new foxEngine.Image("images/flag.png", 32, 32, 1550, 34);
 	goal.setType("goal");
 	goal.setZIndex(900);
 	foxEngine.addCollisionEvent("player", "goal", playerGoalCollision);
@@ -97,6 +111,10 @@ function buildEndMessage(imgSrc)
 	var yPos = foxEngine.getHeight() / 2 - height / 2;
 	var endMessage = new foxEngine.Image(imgSrc, width, height, xPos, yPos);
 	endMessage.fixed = true;
+
+	var resetBtn = new foxEngine.Button("Play Again", reset, width, 30, xPos, yPos+height, true);
+	resetBtn.fixed = true;
+
 	return endMessage;
 }
 
