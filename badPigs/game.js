@@ -1,9 +1,11 @@
 /** @global */
 var hasWeapon = false;
 var goalPos = null;
+var goalAction = null;
+var currentFile = null;
 
 /*
- * @ desc Load everything once window is ready for it
+ * @ desc Load level 1 once window is ready for it
  */
 window.onload = function()
 {
@@ -11,24 +13,11 @@ window.onload = function()
 }
 
 /*
- * @desc Initialize foxEngine and build game
+ * @desc Load level with input from JSON file
  */
-function loadEngine(levelObj)
-{
-	foxEngine.open("target", 800, 500);
-	var background = new foxEngine.Image("images/field.jpg", 2500, foxEngine.getHeight());
-	var player = buildPlayer();
-	foxEngine.scrollToFollow(background, player);
-	setKeyEvents(player);
-	buildEnemies(levelObj.enemies);
-	buildPlatforms(levelObj.platforms);
-	buildStars(levelObj.stars);
-	goalPos = levelObj.goal;
-	setBorderCollisions();
-}
-
 function loadFile(jsonFile)
 {
+	currentFile = jsonFile;
 	var rawFile = new XMLHttpRequest();
 	rawFile.onreadystatechange = function()
 	{
@@ -36,16 +25,38 @@ function loadFile(jsonFile)
 			loadEngine(JSON.parse(rawFile.responseText));
 	}
 	rawFile.open("GET", jsonFile, true);
-	rawFile.send();
+	rawFile.send(null);
+}
+
+/*
+ * @desc Initialize foxEngine and build game
+ */
+function loadEngine(levelObj)
+{
+	foxEngine.destroy();
+	foxEngine.open("target", 800, 500);
+	var background = new foxEngine.Image("images/field.jpg", 2500, foxEngine.getHeight());
+	var player = buildPlayer();
+	setKeyEvents(player);
+	setBorderCollisions();
+	foxEngine.scrollToFollow(background, player);
+
+	buildEnemies(levelObj.enemies);
+	buildPlatforms(levelObj.platforms);
+	buildStars(levelObj.stars);
+	goalPos = levelObj.goal;
+	goalAction = levelObj.goal.action;
 }
 
 /*
  * @desc Reset engine and game
  */
-function reset()
+function reset(jsonFile)
 {
-	foxEngine.destroy();
-	loadEngine();
+	if(typeof jsonFile == "undefined")
+		jsonFile = currentFile;
+	hasWeapon = false;
+	loadFile(jsonFile);
 }
 
 /*
@@ -85,7 +96,7 @@ function buildEndMessage(imgSrc)
 	var endMessage = new foxEngine.Image(imgSrc, width, height, xPos, yPos);
 	endMessage.fixed = true;
 
-	var resetBtn = new foxEngine.Button("Play Again", reset, width, 30, xPos, yPos+height, true);
+	var resetBtn = new foxEngine.Button("Play Again", function(e){ reset(currentFile); }, width, 30, xPos, yPos+height, true);
 	resetBtn.fixed = true;
 
 	return endMessage;
@@ -280,6 +291,5 @@ function buildStars(stars)
 function playerGoalCollision(player, goal)
 {
 	goal.remove();
-	reset(); // TODO
-	setLevel('level2.json'); // TODO
+	eval(goalAction);
 }

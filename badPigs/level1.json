@@ -29,6 +29,5 @@
 	"stars": [
 		{"x": 760, "y": 240}
 	],
-	"goal": {"x": 1550, "y": 34},
-	"goalAction": "setLevel('level2.json');"
+	"goal": {"x": 1550, "y": 34, "action": "reset('level2.json');"}
 }
