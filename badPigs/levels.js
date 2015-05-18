@@ -31,7 +31,7 @@ jsonLevels['level1'] =
 	],
 	"bricks": [],
 	"stars": [],
-	"goal": {"x": 1550, "y": 34, "action": "reset('level2');"}
+	"goal": {"x": 1550, "y": 34, "action": "buildEndMessage('images/you_win.png', 'Next Level', function(){ reset('level2');});"}
 }
 
 jsonLevels['level2'] =
@@ -82,7 +82,7 @@ jsonLevels['level2'] =
 	"stars": [
 		{"x": 1200, "y": 240}
 	],
-	"goal": {"x": 160, "y": 420, "action": "reset('level3');"}
+	"goal": {"x": 160, "y": 420, "action": "buildEndMessage('images/you_win.png', 'Next Level', function(){ reset('level3');});"}
 }
 
 jsonLevels['level3'] =
@@ -104,5 +104,5 @@ jsonLevels['level3'] =
 		{"x": 500, "y": 300, "width": 50, "height": 50}
 	],
 	"stars": [],
-	"goal": {"x": 409, "y": 500, "action": "buildEndMessage('images/you_win.png');"}
+	"goal": {"x": 409, "y": 500, "action": "buildEndMessage('images/you_win.png', 'Start Over', function(){ reset('level1');});"}
 }

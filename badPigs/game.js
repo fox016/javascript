@@ -82,7 +82,7 @@ function buildGoal()
 /*
  * @desc Build and return win message object
  */
-function buildEndMessage(imgSrc)
+function buildEndMessage(imgSrc, buttonText, buttonFunction)
 {
 	var width = 200; var height = 200;
 	var xPos = foxEngine.getWidth() / 2 - width / 2;
@@ -90,7 +90,7 @@ function buildEndMessage(imgSrc)
 	var endMessage = new foxEngine.Image(imgSrc, width, height, xPos, yPos);
 	endMessage.fixed = true;
 
-	var resetBtn = new foxEngine.Button("Play Again", function(e){ reset(currentLevel); }, width, 30, xPos, yPos+height, true);
+	var resetBtn = new foxEngine.Button(buttonText, function(e){ buttonFunction(); }, width, 30, xPos, yPos+height, true);
 	resetBtn.fixed = true;
 
 	return endMessage;
@@ -154,7 +154,7 @@ function playerEnemyCollision(player, enemy)
 	{
 		player.remove();
 		hasWeapon = false;
-		buildEndMessage("images/you_lose.jpg");
+		buildEndMessage("images/you_lose.jpg", "Try Again", function(){ reset(currentLevel); });
 	}
 }
 
