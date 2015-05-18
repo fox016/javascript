@@ -2,30 +2,23 @@
 var hasWeapon = false;
 var goalPos = null;
 var goalAction = null;
-var currentFile = null;
+var currentLevel = null;
 
 /*
  * @ desc Load level 1 once window is ready for it
  */
 window.onload = function()
 {
-	loadFile("level1.json");
+	loadLevel("level1");
 }
 
 /*
  * @desc Load level with input from JSON file
  */
-function loadFile(jsonFile)
+function loadLevel(levelKey)
 {
-	currentFile = jsonFile;
-	var rawFile = new XMLHttpRequest();
-	rawFile.onreadystatechange = function()
-	{
-		if(rawFile.readyState == 4)
-			loadEngine(JSON.parse(rawFile.responseText));
-	}
-	rawFile.open("GET", jsonFile, true);
-	rawFile.send(null);
+	currentLevel = levelKey;
+	loadEngine(jsonLevels[levelKey]);
 }
 
 /*
@@ -51,12 +44,12 @@ function loadEngine(levelObj)
 /*
  * @desc Reset engine and game
  */
-function reset(jsonFile)
+function reset(levelKey)
 {
-	if(typeof jsonFile == "undefined")
-		jsonFile = currentFile;
+	if(typeof levelKey == "undefined")
+		levelKey = currentLevel;
 	hasWeapon = false;
-	loadFile(jsonFile);
+	loadLevel(levelKey);
 }
 
 /*
@@ -96,7 +89,7 @@ function buildEndMessage(imgSrc)
 	var endMessage = new foxEngine.Image(imgSrc, width, height, xPos, yPos);
 	endMessage.fixed = true;
 
-	var resetBtn = new foxEngine.Button("Play Again", function(e){ reset(currentFile); }, width, 30, xPos, yPos+height, true);
+	var resetBtn = new foxEngine.Button("Play Again", function(e){ reset(currentLevel); }, width, 30, xPos, yPos+height, true);
 	resetBtn.fixed = true;
 
 	return endMessage;
@@ -292,4 +285,95 @@ function playerGoalCollision(player, goal)
 {
 	goal.remove();
 	eval(goalAction);
+}
+
+
+
+
+/*********************************
+ * JSON LEVELS
+ * ******************************/
+var jsonLevels = {};
+
+jsonLevels['level1'] =
+{
+	"enemies": {
+		"vel_max_x": 100,
+		"positions": [
+			{"x": 100, "y": 300, "dir": 1},
+			{"x": 300, "y": 300, "dir": -1},
+			{"x": 500, "y": 300, "dir": 1},
+			{"x": 700, "y": 300, "dir": -1},
+			{"x": 900, "y": 300, "dir": 1},
+			{"x": 1100, "y": 300, "dir": -1},
+			{"x": 1300, "y": 300, "dir": 1},
+			{"x": 1500, "y": 300, "dir": -1},
+			{"x": 1700, "y": 300, "dir": 1},
+			{"x": 1900, "y": 300, "dir": -1},
+			{"x": 1550, "y": 34, "dir": 1},
+			{"x": 1550, "y": 34, "dir": -1}
+		]
+	},
+	"platforms": [
+		{"x": 100, "y": 450, "width": 150, "height": 20},
+		{"x": 300, "y": 400, "width": 150, "height": 20},
+		{"x": 500, "y": 350, "width": 150, "height": 20},
+		{"x": 700, "y": 300, "width": 150, "height": 20},
+		{"x": 900, "y": 250, "width": 150, "height": 20},
+		{"x": 1100, "y": 200, "width": 150, "height": 20},
+		{"x": 1300, "y": 150, "width": 150, "height": 20},
+		{"x": 1500, "y": 100, "width": 150, "height": 20}
+	],
+	"stars": [{}],
+	"goal": {"x": 1550, "y": 34, "action": "reset('level2');"}
+}
+
+jsonLevels['level2'] =
+{
+	"enemies": {
+		"vel_max_x": 100,
+		"positions": [
+			{"x": 100, "y": 200, "dir": 1},
+			{"x": 200, "y": 200, "dir": -1},
+			{"x": 300, "y": 200, "dir": 1},
+			{"x": 400, "y": 200, "dir": -1},
+			{"x": 500, "y": 200, "dir": 1},
+			{"x": 600, "y": 200, "dir": -1},
+			{"x": 700, "y": 200, "dir": 1},
+			{"x": 800, "y": 200, "dir": -1},
+			{"x": 900, "y": 200, "dir": 1},
+			{"x": 1000, "y": 200, "dir": -1},
+			{"x": 1100, "y": 200, "dir": 1},
+			{"x": 1200, "y": 200, "dir": -1},
+			{"x": 1300, "y": 200, "dir": 1},
+			{"x": 1400, "y": 200, "dir": -1},
+			{"x": 1500, "y": 200, "dir": 1},
+			{"x": 1600, "y": 200, "dir": -1},
+			{"x": 1700, "y": 200, "dir": 1},
+			{"x": 1800, "y": 200, "dir": -1},
+			{"x": 1900, "y": 200, "dir": 1},
+			{"x": 2000, "y": 200, "dir": -1}
+		]
+	},
+	"platforms": [
+		{"x": 100, "y": 450, "width": 150, "height": 30},
+		{"x": 250, "y": 430, "width": 150, "height": 30},
+		{"x": 400, "y": 410, "width": 150, "height": 30},
+		{"x": 550, "y": 390, "width": 150, "height": 30},
+		{"x": 700, "y": 370, "width": 150, "height": 30},
+		{"x": 850, "y": 350, "width": 150, "height": 30},
+		{"x": 1000, "y": 330, "width": 150, "height": 30},
+		{"x": 1150, "y": 310, "width": 150, "height": 30},
+		{"x": 1300, "y": 330, "width": 150, "height": 30},
+		{"x": 1450, "y": 350, "width": 150, "height": 30},
+		{"x": 1600, "y": 370, "width": 150, "height": 30},
+		{"x": 1750, "y": 390, "width": 150, "height": 30},
+		{"x": 1900, "y": 410, "width": 150, "height": 30},
+		{"x": 2050, "y": 430, "width": 150, "height": 30},
+		{"x": 2200, "y": 450, "width": 150, "height": 30}
+	],
+	"stars": [
+		{"x": 1200, "y": 240}
+	],
+	"goal": {"x": 160, "y": 420, "action": "buildEndMessage('images/you_win.png');"}
 }
