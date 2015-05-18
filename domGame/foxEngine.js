@@ -436,6 +436,8 @@ function _foxEngine()
 		this.isGravity = false;
 		this.gravity = 1000;
 
+		this.boundInView = false;
+
 		/*
 		 * @desc Called every delta_t milliseconds, updates physics variables
 		 */
@@ -453,14 +455,29 @@ function _foxEngine()
 			this.pos_x += (this.vel_x * t);
 			this.pos_y += (this.vel_y * t);
 
-			// If trying to go out of range, call onHitVerticalBorder handler
-			var boundX = engine.getBoundedValue(this.pos_x, 0, getFullWidth() - this.getWidth());
+			// Define boundaries
+			var minPosX = 0;
+			var maxPosX = getFullWidth() - this.getWidth();
+			var minPosY = 0;
+			var maxPosY = getFullHeight() - this.getHeight();
+			if(this.boundInView)
+			{
+				minPosX = -1 * bg_x;
+				maxPosX = minPosX + frame.width;
+				minPosY = -1 * bg_y;
+				maxPosY = minPosY + frame.height;
+			}
+
+			// If trying to go out of X range, call onHitVerticalBorder handler
+			var boundX = engine.getBoundedValue(this.pos_x, minPosX, maxPosX);
 			if(boundX != this.pos_x)
 			{
 				this.pos_x = boundX;
 				this.onHitVerticalBorder();
 			}
-			var boundY = engine.getBoundedValue(this.pos_y, 0, getFullHeight() - this.getHeight());
+
+			// If trying to go out of Y range, kill momentum
+			var boundY = engine.getBoundedValue(this.pos_y, minPosY, maxPosY);
 			if(boundY != this.pos_y)
 			{
 				this.pos_y = boundY;
@@ -653,8 +670,6 @@ function _foxEngine()
 		if(typeof yPos == "undefined")
 			yPos = 0;
 
-		var RIGHT = 0;
-		var LEFT = 1;
 
 		this.faceRightSrc = src;
 		this.faceLeftSrc = src;
@@ -709,6 +724,14 @@ function _foxEngine()
 				this.faceRight();
 			else
 				this.faceLeft();
+		}
+
+		/*
+		 * @desc Get direction that object is facing
+		 */
+		this.getDirection = function()
+		{
+			return this.direction;
 		}
 
 		/*
@@ -782,3 +805,8 @@ var DOWN_KEY  = 40;
 var LEFT_KEY  = 37;
 var RIGHT_KEY = 39;
 var SPACE_KEY = 32;
+
+var RIGHT = 0;
+var LEFT = 1;
+var UP = 2;
+var DOWN = 3;

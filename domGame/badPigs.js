@@ -1,3 +1,9 @@
+/** @global */
+var hasWeapon = false;
+
+/*
+ * @ desc Load everything once window is ready for it
+ */
 window.onload = function()
 {
 	loadEngine();
@@ -15,6 +21,7 @@ function loadEngine()
 	setKeyEvents(player);
 	var enemies = buildEnemies();
 	var platforms = buildPlatforms();
+	buildItems();
 	setBorderCollisions();
 	// TODO add timer (or time limit)
 }
@@ -35,6 +42,7 @@ function buildPlayer()
 {
 	var player = new foxEngine.Image("images/guy_right.png", 48, 66);
 	player.setHFlipImages("images/guy_right.png", "images/guy_left.png");
+	player.faceRight();
 	player.setType("player");
 	player.applyGravity(true);
 	player.setZIndex(1000);
@@ -107,6 +115,23 @@ function buildGoal()
 }
 
 /*
+ * @desc Build other items that the player can get
+ */
+function buildItems()
+{
+	var star = new foxEngine.Image("images/star.png", 30, 30, 760, 240);
+	star.setType("star");
+	foxEngine.addCollisionEvent("player", "star", function(player, star) {
+		if(!hasWeapon)
+		{
+			hasWeapon = true;
+			star.pushY(-100000);
+			setTimeout(function(){star.remove()}, 500);
+		}
+	});
+}
+
+/*
  * @desc Build and return win message object
  */
 function buildEndMessage(imgSrc)
@@ -151,6 +176,18 @@ function setKeyEvents(targetObj)
 			setTimeout(function() { jumpFlag = true; }, jumpTimer);
 		}
 	});
+
+	// Fire gun
+	var weaponFlag = true;
+	var weaponTimer = 500;
+	foxEngine.addKeyEvent(SPACE_KEY, function(){
+		if(weaponFlag && hasWeapon)
+		{
+			fireWeapon(targetObj);
+			weaponFlag = false;
+			setTimeout(function() { weaponFlag = true; }, weaponTimer);
+		}
+	});
 }
 
 /*
@@ -160,18 +197,15 @@ function playerEnemyCollision(player, enemy)
 {
 	if(player.isDirectlyAbove(enemy))
 	{
-		enemy.remove();
+		removeEnemy(enemy);
 		player.stopY();
 		player.pushY(-1 * 40000);
-
-		// Show flag if all enemies are gone
-		if(foxEngine.typeComponentMap['enemy'].length == 0)
-			buildGoal();
 	}
 
 	else
 	{
 		player.remove();
+		hasWeapon = false;
 		buildEndMessage("images/you_lose.jpg");
 	}
 }
@@ -204,4 +238,46 @@ function setBorderCollisions()
 	foxEngine.addCollisionEvent("player", "borderBottom", function(player, border) {
 		player.stopDown();
 	});
+}
+
+/*
+ * @desc Fire component's weapon
+ */
+function fireWeapon(component)
+{
+	var startPos = component.getCenter();
+	var bullet = new foxEngine.Image("images/bullet.png", 20, 20, startPos.x, startPos.y);
+	bullet.setType("bullet");
+	bullet.friction = 0.0;
+	bullet.vel_max_x = component.vel_max_x + 100;
+	bullet.pushX((component.getDirection() == LEFT ? -1 : 1) * 1000000);
+	bullet.setZIndex(1100);
+	bullet.boundInView = true;
+	bullet.onHitVerticalBorder = function() {
+		bullet.remove();
+	};
+	foxEngine.addCollisionEvent("enemy", "bullet", function(enemy, bullet) {
+		enemyHitByBullet(enemy, bullet);
+	});;
+}
+
+/*
+ * @desc Enemy react to bullet hit
+ */
+function enemyHitByBullet(enemy, bullet)
+{
+	removeEnemy(enemy);
+	bullet.remove();
+}
+
+/*
+ * @desc Remove enemy, and react when all enemies are gone
+ */
+function removeEnemy(enemy)
+{
+	enemy.remove();
+
+	// Show flag if all enemies are gone
+	if(foxEngine.typeComponentMap['enemy'].length == 0)
+		buildGoal();
 }
