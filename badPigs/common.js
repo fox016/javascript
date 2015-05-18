@@ -1,28 +1,42 @@
 /** @global */
 var hasWeapon = false;
+var goalPos = null;
 
 /*
  * @ desc Load everything once window is ready for it
  */
 window.onload = function()
 {
-	loadEngine();
+	loadFile("level1.json");
 }
 
 /*
  * @desc Initialize foxEngine and build game
  */
-function loadEngine()
+function loadEngine(levelObj)
 {
 	foxEngine.open("target", 800, 500);
 	var background = new foxEngine.Image("images/field.jpg", 2500, foxEngine.getHeight());
 	var player = buildPlayer();
 	foxEngine.scrollToFollow(background, player);
 	setKeyEvents(player);
-	var enemies = buildEnemies();
-	var platforms = buildPlatforms();
-	var stars = buildStars();
+	buildEnemies(levelObj.enemies);
+	buildPlatforms(levelObj.platforms);
+	buildStars(levelObj.stars);
+	goalPos = levelObj.goal;
 	setBorderCollisions();
+}
+
+function loadFile(jsonFile)
+{
+	var rawFile = new XMLHttpRequest();
+	rawFile.onreadystatechange = function()
+	{
+		if(rawFile.readyState == 4)
+			loadEngine(JSON.parse(rawFile.responseText));
+	}
+	rawFile.open("GET", jsonFile, true);
+	rawFile.send();
 }
 
 /*
@@ -51,9 +65,9 @@ function buildPlayer()
 /*
  * @desc Build and return goal object
  */
-function buildGoal(xPos, yPos)
+function buildGoal()
 {
-	var goal = new foxEngine.Image("images/flag.png", 32, 32, xPos, yPos);
+	var goal = new foxEngine.Image("images/flag.png", 32, 32, goalPos.x, goalPos.y);
 	goal.setType("goal");
 	goal.setZIndex(900);
 	foxEngine.addCollisionEvent("player", "goal", playerGoalCollision);
@@ -198,5 +212,74 @@ function removeEnemy(enemy)
 	enemy.remove();
 
 	if(foxEngine.typeComponentMap['enemy'].length == 0)
-		allEnemiesGone();
+		buildGoal();
+}
+
+/*
+ * @desc Build list of enemy objects
+ */
+function buildEnemies(enemies)
+{
+	for(var i = 0; i < enemies.positions.length; i++) {
+		var enemy = new foxEngine.Image("images/pig_left.png", 60, 40, enemies.positions[i].x, enemies.positions[i].y);
+		enemy.setHFlipImages("images/pig_right.png", "images/pig_left.png");
+		enemy.setType("enemy");
+		enemy.friction = 0.0;
+		enemy.vel_max_x = enemies.vel_max_x;
+		enemy.pushX(enemies.positions[i].dir * 1000000);
+		if(enemies.positions[i].dir > 0)
+			enemy.faceRight();
+		enemy.applyGravity(true);
+		enemy.setZIndex(800);
+		enemy.onHitVerticalBorder = function() {
+			this.reverseX();
+			this.hFlip();
+		};
+	}
+	foxEngine.addCollisionEvent("player", "enemy", playerEnemyCollision);
+}
+
+/*
+ * @desc Build and return a list of platform objects
+ */
+function buildPlatforms(platforms)
+{
+	for(var i = 0; i < platforms.length; i++)
+	{
+		var platform = new foxEngine.Image("images/platform.png", platforms[i].width,
+				platforms[i].height, platforms[i].x, platforms[i].y);
+		platform.setType("platform");
+	}
+	foxEngine.addCollisionEvent("player", "platform", platformCollision);
+	foxEngine.addCollisionEvent("enemy", "platform", platformCollision);
+}
+
+/*
+ * @desc Build stars that the player can get
+ */
+function buildStars(stars)
+{
+	for(var i = 0; i < stars.length; i++)
+	{
+		var star = new foxEngine.Image("images/star.png", 30, 30, star[i].x, star[i].y);
+		star.setType("star");
+	}
+	foxEngine.addCollisionEvent("player", "star", function(player, star) {
+		if(!hasWeapon)
+		{
+			hasWeapon = true;
+			star.pushY(-100000);
+			setTimeout(function(){star.remove()}, 500);
+		}
+	});
+}
+
+/*
+ * @desc Called when a player and a goal collide
+ */
+function playerGoalCollision(player, goal)
+{
+	goal.remove();
+	reset(); // TODO
+	setLevel('level2.json'); // TODO
 }
