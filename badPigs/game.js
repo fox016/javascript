@@ -36,6 +36,7 @@ function loadEngine(levelObj)
 
 	buildEnemies(levelObj.enemies);
 	buildPlatforms(levelObj.platforms);
+	buildBricks(levelObj.bricks);
 	buildStars(levelObj.stars);
 	goalPos = levelObj.goal;
 	goalAction = levelObj.goal.action;
@@ -142,7 +143,7 @@ function setKeyEvents(targetObj)
  */
 function playerEnemyCollision(player, enemy)
 {
-	if(player.isDirectlyAbove(enemy))
+	if(player.isDirectlyAbove(enemy)[0])
 	{
 		removeEnemy(enemy);
 		player.stopY();
@@ -162,9 +163,53 @@ function playerEnemyCollision(player, enemy)
  */
 function platformCollision(component, platform)
 {
-	if(component.isDirectlyAbove(platform) && component.vel_y >= 0) {
+	if(component.isDirectlyAbove(platform)[0] && component.vel_y >= 0) {
 		component.stopDown();
 		component.placeAbove(platform);
+	}
+}
+
+/*
+ * @desc Called when certain components and bricks collide
+ */
+function brickCollision(component, brick)
+{
+	if(component.type == "bullet")
+	{
+		component.remove();
+	}
+	else
+	{
+		var distAbove = Number.POSITIVE_INFINITY;
+		var distBelow = Number.POSITIVE_INFINITY;
+		var distLeft = Number.POSITIVE_INFINITY;
+		var distRight = Number.POSITIVE_INFINITY;
+
+		if(component.vel_y >= 0)
+			distAbove = component.isDirectlyAbove(brick)[1];
+		else
+			distBelow = component.isDirectlyBelow(brick)[1];
+		if(component.vel_x > 0)
+			distLeft = component.isDirectlyLeftOf(brick)[1];
+		else if(component.vel_x < 0)
+			distRight = component.isDirectlyRightOf(brick)[1];
+
+		if(distAbove < distLeft && distAbove < distRight) {
+			component.stopDown();
+			component.placeAbove(brick);
+		}
+		else if(distLeft < distAbove && distLeft < distBelow) {
+			component.onHitVerticalBorder();
+			component.placeLeftOf(brick);
+		}
+		else if(distRight < distAbove && distRight < distBelow) {
+			component.onHitVerticalBorder();
+			component.placeRightOf(brick);
+		}
+		else if(distBelow < distLeft && distBelow < distRight) {
+			component.stopUp();
+			component.placeBelow(brick);
+		}
 	}
 }
 
@@ -194,9 +239,6 @@ function fireWeapon(component)
 	bullet.onHitVerticalBorder = function() {
 		bullet.remove();
 	};
-	foxEngine.addCollisionEvent("enemy", "bullet", function(enemy, bullet) {
-		enemyHitByBullet(enemy, bullet);
-	});;
 }
 
 /*
@@ -220,7 +262,7 @@ function removeEnemy(enemy)
 }
 
 /*
- * @desc Build list of enemy objects
+ * @desc Build enemy objects
  */
 function buildEnemies(enemies)
 {
@@ -244,18 +286,40 @@ function buildEnemies(enemies)
 }
 
 /*
- * @desc Build and return a list of platform objects
+ * @desc Build platform objects
  */
 function buildPlatforms(platforms)
 {
-	for(var i = 0; i < platforms.length; i++)
+	if(platforms.length > 0)
 	{
-		var platform = new foxEngine.Image("images/platform.png", platforms[i].width,
-				platforms[i].height, platforms[i].x, platforms[i].y);
-		platform.setType("platform");
+		for(var i = 0; i < platforms.length; i++)
+		{
+			var platform = new foxEngine.Image("images/platform.png", platforms[i].width,
+					platforms[i].height, platforms[i].x, platforms[i].y);
+			platform.setType("platform");
+		}
+		foxEngine.addCollisionEvent("player", "platform", platformCollision);
+		foxEngine.addCollisionEvent("enemy", "platform", platformCollision);
 	}
-	foxEngine.addCollisionEvent("player", "platform", platformCollision);
-	foxEngine.addCollisionEvent("enemy", "platform", platformCollision);
+}
+
+/*
+ * @desc Build brick objects
+ */
+function buildBricks(bricks)
+{
+	if(bricks.length > 0)
+	{
+		for(var i = 0; i < bricks.length; i++)
+		{
+			var brick = new foxEngine.Image("images/brick.jpg", bricks[i].width,
+					bricks[i].height, bricks[i].x, bricks[i].y);
+			brick.setType("brick");
+		}
+		foxEngine.addCollisionEvent("player", "brick", brickCollision);
+		foxEngine.addCollisionEvent("enemy", "brick", brickCollision);
+		foxEngine.addCollisionEvent("bullet", "brick", brickCollision);
+	}
 }
 
 /*
@@ -263,19 +327,26 @@ function buildPlatforms(platforms)
  */
 function buildStars(stars)
 {
-	for(var i = 0; i < stars.length; i++)
+	if(stars.length > 0)
 	{
-		var star = new foxEngine.Image("images/star.png", 30, 30, stars[i].x, stars[i].y);
-		star.setType("star");
-	}
-	foxEngine.addCollisionEvent("player", "star", function(player, star) {
-		if(!hasWeapon)
+		for(var i = 0; i < stars.length; i++)
 		{
-			hasWeapon = true;
-			star.pushY(-100000);
-			setTimeout(function(){star.remove()}, 500);
+			var star = new foxEngine.Image("images/star.png", 30, 30, stars[i].x, stars[i].y);
+			star.setType("star");
 		}
-	});
+
+		foxEngine.addCollisionEvent("player", "star", function(player, star) {
+			if(!hasWeapon)
+			{
+				hasWeapon = true;
+				foxEngine.addCollisionEvent("enemy", "bullet", function(enemy, bullet) {
+					enemyHitByBullet(enemy, bullet);
+				});;
+				star.pushY(-100000);
+				setTimeout(function(){star.remove()}, 500);
+			}
+		});
+	}
 }
 
 /*
@@ -324,7 +395,8 @@ jsonLevels['level1'] =
 		{"x": 1300, "y": 150, "width": 150, "height": 20},
 		{"x": 1500, "y": 100, "width": 150, "height": 20}
 	],
-	"stars": [{}],
+	"bricks": [],
+	"stars": [],
 	"goal": {"x": 1550, "y": 34, "action": "reset('level2');"}
 }
 
@@ -372,8 +444,31 @@ jsonLevels['level2'] =
 		{"x": 2050, "y": 430, "width": 150, "height": 30},
 		{"x": 2200, "y": 450, "width": 150, "height": 30}
 	],
+	"bricks": [],
 	"stars": [
 		{"x": 1200, "y": 240}
 	],
-	"goal": {"x": 160, "y": 420, "action": "buildEndMessage('images/you_win.png');"}
+	"goal": {"x": 160, "y": 420, "action": "reset('level3');"}
+}
+
+jsonLevels['level3'] =
+{
+	"enemies": {
+		"vel_max_x": 100,
+		"positions": [
+			{"x": 500, "y": 400, "dir": 1},
+			{"x": 500, "y": 400, "dir": -1},
+			{"x": 400, "y": 280, "dir": -1},
+		]
+	},
+	"platforms": [],
+	"bricks": [
+		{"x": 100, "y": 400, "width": 100, "height": 100},
+		{"x": 650, "y": 400, "width": 100, "height": 100},
+		{"x": 300, "y": 350, "width": 250, "height": 50},
+		{"x": 300, "y": 300, "width": 50, "height": 50},
+		{"x": 500, "y": 300, "width": 50, "height": 50}
+	],
+	"stars": [],
+	"goal": {"x": 409, "y": 500, "action": "buildEndMessage('images/you_win.png');"}
 }

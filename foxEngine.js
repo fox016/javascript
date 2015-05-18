@@ -158,6 +158,10 @@ function _foxEngine()
 	 */
 	this.addCollisionEvent = function(type1, type2, handler)
 	{
+		if(!(type1 in engine.typeComponentMap))
+			engine.typeComponentMap[type1] = [];
+		if(!(type2 in engine.typeComponentMap))
+			engine.typeComponentMap[type2] = [];
 		collisionEvents.push({type1: type1, type2: type2, handler: handler});
 	}
 
@@ -397,9 +401,55 @@ function _foxEngine()
 			var otherCorners = otherComponent.getCorners();
 			if(thisCorners.bottomLeft.y < otherCorners.bottomLeft.y) {
 				if(thisCorners.bottomRight.x > otherCorners.bottomLeft.x)
-					return thisCorners.bottomLeft.x < otherCorners.bottomRight.x;
+					if(thisCorners.bottomLeft.x < otherCorners.bottomRight.x)
+						return [true, thisCorners.bottomLeft.y - otherCorners.topLeft.y];
 			}
-			return false;
+			return [false, Number.POSITIVE_INFINITY];
+		}
+
+		/*
+		 * @desc Returns true iff this Component is directly below the otherComponent
+		 */
+		this.isDirectlyBelow = function(otherComponent)
+		{
+			var thisCorners = this.getCorners();
+			var otherCorners = otherComponent.getCorners();
+			if(thisCorners.topLeft.y > otherCorners.topLeft.y) {
+				if(thisCorners.bottomRight.x > otherCorners.bottomLeft.x)
+					if(thisCorners.bottomLeft.x < otherCorners.bottomRight.x)
+						return [true, otherCorners.bottomLeft.y - thisCorners.topLeft.y];
+			}
+			return [false, Number.POSITIVE_INFINITY];
+		}
+
+		/*
+		 * @desc Returns true iff this Component is directly left of the otherComponent
+		 */
+		this.isDirectlyLeftOf = function(otherComponent)
+		{
+			var thisCorners = this.getCorners();
+			var otherCorners = otherComponent.getCorners();
+			if(thisCorners.bottomRight.x < otherCorners.bottomRight.x) {
+				if(thisCorners.bottomRight.y > otherCorners.topRight.y)
+					if(thisCorners.topRight.y < otherCorners.bottomRight.y)
+						return [true, thisCorners.bottomRight.x - otherCorners.bottomLeft.x];
+			}
+			return [false, Number.POSITIVE_INFINITY];
+		}
+
+		/*
+		 * @desc Returns true iff this Component is directly right of the otherComponent
+		 */
+		this.isDirectlyRightOf = function(otherComponent)
+		{
+			var thisCorners = this.getCorners();
+			var otherCorners = otherComponent.getCorners();
+			if(thisCorners.bottomLeft.x > otherCorners.bottomLeft.x) {
+				if(thisCorners.bottomLeft.y > otherCorners.topLeft.y)
+					if(thisCorners.topLeft.y < otherCorners.bottomLeft.y)
+						return [true, otherCorners.bottomRight.x - thisCorners.bottomLeft.x];
+			}
+			return [false, Number.POSITIVE_INFINITY];
 		}
 
 		/*
@@ -578,12 +628,21 @@ function _foxEngine()
 		}
 
 		/*
-		 * @desc If Y velocty and acceleration are positive, kill them
+		 * @desc If Y velocity and acceleration are positive, kill them
 		 */
 		this.stopDown = function()
 		{
 			this.vel_y = Math.min(0, this.vel_y);
 			this.acc_y = Math.min(0, this.acc_y);
+		}
+
+		/*
+		 * @desc If Y velocity and acceleration are negative, kill them
+		 */
+		this.stopUp = function()
+		{
+			this.vel_y = Math.max(0, this.vel_y);
+			this.acc_y = Math.max(0, this.acc_y);
 		}
 
 		/*
@@ -637,6 +696,30 @@ function _foxEngine()
 		this.placeAbove = function(otherComponent)
 		{
 			this.pos_y = otherComponent.y - this.getHeight();
+		}
+
+		/*
+		 * @desc Places component directly below other component
+		 */
+		this.placeBelow = function(otherComponent)
+		{
+			this.pos_y = otherComponent.y + otherComponent.getHeight();
+		}
+
+		/*
+		 * @desc Places component directly left of other component
+		 */
+		this.placeLeftOf = function(otherComponent)
+		{
+			this.pos_x = otherComponent.x - this.getWidth();
+		}
+
+		/*
+		 * @desc Places component directly right of other component
+		 */
+		this.placeRightOf = function(otherComponent)
+		{
+			this.pos_x = otherComponent.x + otherComponent.getWidth();
 		}
 
 		/*
