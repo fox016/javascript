@@ -261,7 +261,7 @@ function buildStars(stars)
 {
 	for(var i = 0; i < stars.length; i++)
 	{
-		var star = new foxEngine.Image("images/star.png", 30, 30, star[i].x, star[i].y);
+		var star = new foxEngine.Image("images/star.png", 30, 30, stars[i].x, stars[i].y);
 		star.setType("star");
 	}
 	foxEngine.addCollisionEvent("player", "star", function(player, star) {
