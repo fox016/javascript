@@ -104,5 +104,38 @@ jsonLevels['level3'] =
 		{"x": 500, "y": 300, "width": 50, "height": 50}
 	],
 	"stars": [],
-	"goal": {"x": 409, "y": 500, "action": "buildEndMessage('images/you_win.png', 'Start Over', function(){ reset('level1');});"}
+	"goal": {"x": 409, "y": 500, "action": "buildEndMessage('images/you_win.png', 'Next Level', function(){ reset('level4');});"}
+}
+
+// TODO fix bricks in level 4 (fall into side of tall bricks beams you to the top)
+jsonLevels['level4'] =
+{
+	"enemies": {
+		"vel_max_x": 200,
+		"positions": [
+			{"x": 320, "y": 380, "dir": 1},
+			{"x": 350, "y": 280, "dir": 1},
+			{"x": 380, "y": 180, "dir": 1}
+		]
+	},
+	"platforms": [
+		{"x": 300, "y": 400, "width": 100, "height": 30},
+		{"x": 300, "y": 300, "width": 100, "height": 30},
+		{"x": 300, "y": 200, "width": 100, "height": 30},
+		{"x": 300, "y": 100, "width": 100, "height": 30}
+	],
+	"bricks": [
+		{"x": 100, "y": 400, "width": 200, "height": 30},
+		{"x": 100, "y": 300, "width": 200, "height": 30},
+		{"x": 100, "y": 200, "width": 200, "height": 30},
+		{"x": 100, "y": 100, "width": 200, "height": 30},
+		{"x": 100, "y": 100, "width": 30, "height": 300},
+		{"x": 400, "y": 400, "width": 200, "height": 30},
+		{"x": 400, "y": 300, "width": 200, "height": 30},
+		{"x": 400, "y": 200, "width": 200, "height": 30},
+		{"x": 400, "y": 100, "width": 200, "height": 30},
+		{"x": 570, "y": 100, "width": 30, "height": 300}
+	],
+	"stars": [{"x": 335, "y": 50}],
+	"goal": {"x": 335, "y": 50, "action": "buildEndMessage('images/you_win.png', 'Start Over', function(){ reset('level1');});"}
 }
