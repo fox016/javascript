@@ -37,6 +37,7 @@ function loadEngine(levelObj)
 	buildEnemies(levelObj.enemies);
 	buildPlatforms(levelObj.platforms);
 	buildBricks(levelObj.bricks);
+	buildLava(levelObj.lava);
 	buildStars(levelObj.stars);
 	goalPos = levelObj.goal;
 	goalAction = levelObj.goal.action;
@@ -142,6 +143,16 @@ function setKeyEvents(targetObj)
 }
 
 /*
+ * @desc Call this when the player loses
+ */
+function playerLose(player)
+{
+	player.remove();
+	hasWeapon = false;
+	buildEndMessage("images/you_lose.jpg", "Try Again", function(){ reset(currentLevel); });
+}
+
+/*
  * @desc Called when a player and an enemy collide
  */
 function playerEnemyCollision(player, enemy)
@@ -154,11 +165,7 @@ function playerEnemyCollision(player, enemy)
 	}
 
 	else
-	{
-		player.remove();
-		hasWeapon = false;
-		buildEndMessage("images/you_lose.jpg", "Try Again", function(){ reset(currentLevel); });
-	}
+		playerLose(player);
 }
 
 /*
@@ -293,17 +300,16 @@ function buildEnemies(enemies)
  */
 function buildPlatforms(platforms)
 {
-	if(platforms.length > 0)
+	if(platforms.length == 0)
+		return;
+	for(var i = 0; i < platforms.length; i++)
 	{
-		for(var i = 0; i < platforms.length; i++)
-		{
-			var platform = new foxEngine.Image("images/platform.png", platforms[i].width,
-					platforms[i].height, platforms[i].x, platforms[i].y);
-			platform.setType("platform");
-		}
-		foxEngine.addCollisionEvent("player", "platform", platformCollision);
-		foxEngine.addCollisionEvent("enemy", "platform", platformCollision);
+		var platform = new foxEngine.Image("images/platform.png", platforms[i].width,
+				platforms[i].height, platforms[i].x, platforms[i].y);
+		platform.setType("platform");
 	}
+	foxEngine.addCollisionEvent("player", "platform", platformCollision);
+	foxEngine.addCollisionEvent("enemy", "platform", platformCollision);
 }
 
 /*
@@ -311,18 +317,35 @@ function buildPlatforms(platforms)
  */
 function buildBricks(bricks)
 {
-	if(bricks.length > 0)
+	if(bricks.length == 0)
+		return;
+	for(var i = 0; i < bricks.length; i++)
 	{
-		for(var i = 0; i < bricks.length; i++)
-		{
-			var brick = new foxEngine.Image("images/brick.jpg", bricks[i].width,
-					bricks[i].height, bricks[i].x, bricks[i].y);
-			brick.setType("brick");
-		}
-		foxEngine.addCollisionEvent("player", "brick", brickCollision);
-		foxEngine.addCollisionEvent("enemy", "brick", brickCollision);
-		foxEngine.addCollisionEvent("bullet", "brick", brickCollision);
+		var brick = new foxEngine.Image("images/brick.jpg", bricks[i].width,
+				bricks[i].height, bricks[i].x, bricks[i].y);
+		brick.setType("brick");
 	}
+	foxEngine.addCollisionEvent("player", "brick", brickCollision);
+	foxEngine.addCollisionEvent("enemy", "brick", brickCollision);
+	foxEngine.addCollisionEvent("bullet", "brick", brickCollision);
+}
+
+/*
+ * @desc Build lava objects
+ */
+function buildLava(lava)
+{
+	if(typeof lava == "undefined")
+		return;
+	if(lava.length == 0)
+		return;
+	for(var i = 0; i < lava.length; i++)
+	{
+		var lava = new foxEngine.Image("images/lava.jpg", lava[i].width,
+				lava[i].height, lava[i].x, lava[i].y);
+		lava.setType("lava");
+	}
+	foxEngine.addCollisionEvent("player", "lava", function(player, lava){ playerLose(player); });
 }
 
 /*
@@ -330,26 +353,25 @@ function buildBricks(bricks)
  */
 function buildStars(stars)
 {
-	if(stars.length > 0)
+	if(stars.length == 0)
+		return;
+	for(var i = 0; i < stars.length; i++)
 	{
-		for(var i = 0; i < stars.length; i++)
-		{
-			var star = new foxEngine.Image("images/star.png", 30, 30, stars[i].x, stars[i].y);
-			star.setType("star");
-		}
-
-		foxEngine.addCollisionEvent("player", "star", function(player, star) {
-			if(!hasWeapon)
-			{
-				hasWeapon = true;
-				foxEngine.addCollisionEvent("enemy", "bullet", function(enemy, bullet) {
-					enemyHitByBullet(enemy, bullet);
-				});;
-				star.pushY(-100000);
-				setTimeout(function(){star.remove()}, 500);
-			}
-		});
+		var star = new foxEngine.Image("images/star.png", 30, 30, stars[i].x, stars[i].y);
+		star.setType("star");
 	}
+
+	foxEngine.addCollisionEvent("player", "star", function(player, star) {
+		if(!hasWeapon)
+		{
+			hasWeapon = true;
+			foxEngine.addCollisionEvent("enemy", "bullet", function(enemy, bullet) {
+				enemyHitByBullet(enemy, bullet);
+			});;
+			star.pushY(-100000);
+			setTimeout(function(){star.remove()}, 500);
+		}
+	});
 }
 
 /*

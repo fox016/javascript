@@ -97,7 +97,7 @@ jsonLevels['level2'] =
 jsonLevels['level3'] =
 {
 	"background": {
-		"img": "images/field.jpg",
+		"img": "images/night.jpg",
 		"width": 800,
 		"height": 500
 	},
@@ -170,5 +170,126 @@ jsonLevels['level4'] =
 		{"x": 450, "y": 100, "width": 170, "height": 30}
 	],
 	"stars": [{"x": 385, "y": 50}],
-	"goal": {"x": 385, "y": 50, "action": "buildEndMessage('images/you_win.png', 'Start Over', function(){ reset('level1');});"}
+	"goal": {"x": 385, "y": 50, "action": "buildEndMessage('images/you_win.png', 'Next Level', function(){ reset('level5');});"}
+}
+
+jsonLevels['level5'] =
+{
+	"background": {
+		"img": "images/night.jpg",
+		"width": 1400,
+		"height": 500
+	},
+	"enemies": {
+		"vel_max_x": 150,
+		"positions": [
+			{"x": 200, "y": 200, "dir": 1},
+			{"x": 250, "y": 200, "dir": 1},
+			{"x": 300, "y": 200, "dir": 1},
+			{"x": 350, "y": 200, "dir": 1},
+			{"x": 400, "y": 200, "dir": 1},
+			{"x": 450, "y": 200, "dir": 1},
+			{"x": 500, "y": 200, "dir": 1},
+			{"x": 550, "y": 200, "dir": 1},
+			{"x": 600, "y": 200, "dir": 1},
+			{"x": 650, "y": 200, "dir": 1},
+			{"x": 700, "y": 200, "dir": 1},
+			{"x": 750, "y": 200, "dir": 1},
+			{"x": 800, "y": 200, "dir": 1},
+			{"x": 850, "y": 200, "dir": 1},
+			{"x": 900, "y": 200, "dir": 1},
+			{"x": 950, "y": 200, "dir": 1},
+			{"x": 1000, "y": 200, "dir": 1}
+		]
+	},
+	"platforms": [
+		{"x": 200, "y": 490, "width": 1000, "height": 15},
+		{"x": 250, "y": 480, "width": 900, "height": 15},
+		{"x": 300, "y": 470, "width": 800, "height": 15},
+		{"x": 350, "y": 460, "width": 700, "height": 15},
+		{"x": 400, "y": 450, "width": 600, "height": 15},
+		{"x": 450, "y": 440, "width": 500, "height": 15},
+		{"x": 500, "y": 430, "width": 400, "height": 15},
+		{"x": 550, "y": 420, "width": 300, "height": 15},
+		{"x": 600, "y": 410, "width": 200, "height": 15},
+		{"x": 650, "y": 400, "width": 100, "height": 15},
+		{"x": 650, "y": 300, "width": 100, "height": 15},
+		{"x": 650, "y": 200, "width": 100, "height": 15},
+		{"x": 650, "y": 100, "width": 100, "height": 15}
+	],
+	"bricks": [
+		{"x": 100, "y": 400, "width": 100, "height": 100},
+		{"x": 1200, "y": 400, "width": 100, "height": 100}
+	],
+	"stars": [],
+	"goal": {"x": 400, "y": 125, "action": "buildEndMessage('images/you_win.png', 'Next Level', function(){ reset('level6');});"}
+}
+
+jsonLevels['level6'] =
+{
+	"background": {
+		"img": "images/field.jpg",
+		"width": 3700,
+		"height": 500
+	},
+	"enemies": {
+		"vel_max_x": 150,
+		"positions": [
+			{"x": 25, "y": 270, "dir": 1},
+			{"x": 75, "y": 270, "dir": 1},
+			{"x": 425, "y": 270, "dir": 1},
+			{"x": 475, "y": 270, "dir": 1},
+			{"x": 825, "y": 270, "dir": 1},
+			{"x": 875, "y": 270, "dir": 1},
+			{"x": 1225, "y": 270, "dir": 1},
+			{"x": 1275, "y": 270, "dir": 1},
+			{"x": 1625, "y": 270, "dir": 1},
+			{"x": 1675, "y": 270, "dir": 1},
+			{"x": 2025, "y": 270, "dir": 1},
+			{"x": 2075, "y": 270, "dir": 1},
+			{"x": 2425, "y": 270, "dir": 1},
+			{"x": 2475, "y": 270, "dir": 1},
+			{"x": 2825, "y": 270, "dir": 1},
+			{"x": 2875, "y": 270, "dir": 1},
+			{"x": 3225, "y": 270, "dir": 1},
+			{"x": 3275, "y": 270, "dir": 1}
+		]
+	},
+	"platforms": [
+		{"x": 0, "y": 100, "width": 50, "height": 20}
+	],
+	"bricks": [
+		{"x": 0, "y": 300, "width": 200, "height": 100},
+		{"x": 400, "y": 300, "width": 200, "height": 100},
+		{"x": 800, "y": 300, "width": 200, "height": 100},
+		{"x": 1200, "y": 300, "width": 200, "height": 100},
+		{"x": 1600, "y": 300, "width": 200, "height": 100},
+		{"x": 2000, "y": 300, "width": 200, "height": 100},
+		{"x": 2400, "y": 300, "width": 200, "height": 100},
+		{"x": 2800, "y": 300, "width": 200, "height": 100},
+		{"x": 3200, "y": 300, "width": 200, "height": 100},
+		{"x": 0, "y": 280, "width": 20, "height": 20},
+		{"x": 400, "y": 280, "width": 20, "height": 20},
+		{"x": 800, "y": 280, "width": 20, "height": 20},
+		{"x": 1200, "y": 280, "width": 20, "height": 20},
+		{"x": 1600, "y": 280, "width": 20, "height": 20},
+		{"x": 2000, "y": 280, "width": 20, "height": 20},
+		{"x": 2400, "y": 280, "width": 20, "height": 20},
+		{"x": 2800, "y": 280, "width": 20, "height": 20},
+		{"x": 3200, "y": 280, "width": 20, "height": 20},
+		{"x": 180, "y": 280, "width": 20, "height": 20},
+		{"x": 580, "y": 280, "width": 20, "height": 20},
+		{"x": 980, "y": 280, "width": 20, "height": 20},
+		{"x": 1380, "y": 280, "width": 20, "height": 20},
+		{"x": 1780, "y": 280, "width": 20, "height": 20},
+		{"x": 2180, "y": 280, "width": 20, "height": 20},
+		{"x": 2580, "y": 280, "width": 20, "height": 20},
+		{"x": 2980, "y": 280, "width": 20, "height": 20},
+		{"x": 3380, "y": 280, "width": 20, "height": 20}
+	],
+	"lava": [
+		{"x": 0, "y": 400, "width": 3700, "height": 100}
+	],
+	"stars": [],
+	"goal": {"x": 2885, "y": 250, "action": "buildEndMessage('images/you_win.png', 'Start Over', function(){ reset('level1');});"}
 }
