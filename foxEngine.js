@@ -705,6 +705,7 @@ function _foxEngine()
 		this.placeAbove = function(otherComponent)
 		{
 			this.pos_y = otherComponent.y - this.getHeight();
+			this.setComponentPosition(this.pos_x, this.pos_y);
 		}
 
 		/*
@@ -713,6 +714,7 @@ function _foxEngine()
 		this.placeBelow = function(otherComponent)
 		{
 			this.pos_y = otherComponent.y + otherComponent.getHeight();
+			this.setComponentPosition(this.pos_x, this.pos_y);
 		}
 
 		/*
@@ -721,6 +723,7 @@ function _foxEngine()
 		this.placeLeftOf = function(otherComponent)
 		{
 			this.pos_x = otherComponent.x - this.getWidth();
+			this.setComponentPosition(this.pos_x, this.pos_y);
 		}
 
 		/*
@@ -729,6 +732,7 @@ function _foxEngine()
 		this.placeRightOf = function(otherComponent)
 		{
 			this.pos_x = otherComponent.x + otherComponent.getWidth();
+			this.setComponentPosition(this.pos_x, this.pos_y);
 		}
 
 		/*
