@@ -154,6 +154,15 @@ function _foxEngine()
 	}
 
 	/*
+	 * @desc Delete key pressed handler
+	 */
+	this.deleteKeyEvent = function(key)
+	{
+		if(key in keyEvents)
+			delete keyEvents[key];
+	}
+
+	/*
 	 * @desc Add collision event handler
 	 */
 	this.addCollisionEvent = function(type1, type2, handler)
@@ -888,6 +897,8 @@ var DOWN_KEY  = 40;
 var LEFT_KEY  = 37;
 var RIGHT_KEY = 39;
 var SPACE_KEY = 32;
+var ENTER_KEY = 13;
+var ESC_KEY = 27;
 
 var RIGHT = 0;
 var LEFT = 1;

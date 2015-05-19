@@ -93,6 +93,9 @@ function buildEndMessage(imgSrc, buttonText, buttonFunction)
 	var resetBtn = new foxEngine.Button(buttonText, function(e){ buttonFunction(); }, width, 30, xPos, yPos+height, true);
 	resetBtn.fixed = true;
 
+	foxEngine.deleteKeyEvent(ENTER_KEY);
+	foxEngine.addKeyEvent(ENTER_KEY, function() { buttonFunction(); });
+
 	return endMessage;
 }
 
