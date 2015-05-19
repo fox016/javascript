@@ -28,7 +28,7 @@ function loadEngine(levelObj)
 {
 	foxEngine.destroy();
 	foxEngine.open("target", 800, 500);
-	var background = new foxEngine.Image("images/field.jpg", 2500, foxEngine.getHeight());
+	var background = new foxEngine.Image(levelObj.background.img, levelObj.background.width, levelObj.background.height);
 	var player = buildPlayer();
 	setKeyEvents(player);
 	setBorderCollisions();
