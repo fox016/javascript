@@ -33,8 +33,6 @@ jsonLevels['level1'] =
 		{"x": 1300, "y": 150, "width": 150, "height": 20},
 		{"x": 1500, "y": 100, "width": 150, "height": 20}
 	],
-	"bricks": [],
-	"stars": [],
 	"goal": {"x": 1550, "y": 34, "action": "buildEndMessage('images/you_win.png', 'Next Level', function(){ reset('level2');});"}
 }
 
@@ -87,7 +85,6 @@ jsonLevels['level2'] =
 		{"x": 2050, "y": 430, "width": 150, "height": 30},
 		{"x": 2200, "y": 450, "width": 150, "height": 30}
 	],
-	"bricks": [],
 	"stars": [
 		{"x": 1200, "y": 240}
 	],
@@ -109,7 +106,6 @@ jsonLevels['level3'] =
 			{"x": 375, "y": 280, "dir": -1},
 		]
 	},
-	"platforms": [],
 	"bricks": [
 		{"x": 75, "y": 400, "width": 100, "height": 100},
 		{"x": 625, "y": 400, "width": 100, "height": 100},
@@ -117,7 +113,6 @@ jsonLevels['level3'] =
 		{"x": 275, "y": 300, "width": 50, "height": 50},
 		{"x": 475, "y": 300, "width": 50, "height": 50}
 	],
-	"stars": [],
 	"goal": {"x": 409, "y": 500, "action": "buildEndMessage('images/you_win.png', 'Next Level', function(){ reset('level4');});"}
 }
 
@@ -221,7 +216,6 @@ jsonLevels['level5'] =
 		{"x": 100, "y": 400, "width": 100, "height": 100},
 		{"x": 1200, "y": 400, "width": 100, "height": 100}
 	],
-	"stars": [],
 	"goal": {"x": 400, "y": 125, "action": "buildEndMessage('images/you_win.png', 'Next Level', function(){ reset('level6');});"}
 }
 
@@ -290,6 +284,5 @@ jsonLevels['level6'] =
 	"lava": [
 		{"x": 0, "y": 400, "width": 3700, "height": 100}
 	],
-	"stars": [],
 	"goal": {"x": 2885, "y": 250, "action": "buildEndMessage('images/you_win.png', 'Start Over', function(){ reset('level1');});"}
 }

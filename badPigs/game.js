@@ -300,6 +300,8 @@ function buildEnemies(enemies)
  */
 function buildPlatforms(platforms)
 {
+	if(typeof platforms == "undefined")
+		return;
 	if(platforms.length == 0)
 		return;
 	for(var i = 0; i < platforms.length; i++)
@@ -317,6 +319,8 @@ function buildPlatforms(platforms)
  */
 function buildBricks(bricks)
 {
+	if(typeof bricks == "undefined")
+		return;
 	if(bricks.length == 0)
 		return;
 	for(var i = 0; i < bricks.length; i++)
@@ -353,6 +357,8 @@ function buildLava(lava)
  */
 function buildStars(stars)
 {
+	if(typeof stars == "undefined")
+		return;
 	if(stars.length == 0)
 		return;
 	for(var i = 0; i < stars.length; i++)
