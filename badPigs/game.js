@@ -345,11 +345,11 @@ function buildLava(lava)
 		return;
 	for(var i = 0; i < lava.length; i++)
 	{
-		var lava = new foxEngine.Image("images/lava.jpg", lava[i].width,
+		var lavaObj = new foxEngine.Image("images/lava.jpg", lava[i].width,
 				lava[i].height, lava[i].x, lava[i].y);
-		lava.setType("lava");
+		lavaObj.setType("lava");
 	}
-	foxEngine.addCollisionEvent("player", "lava", function(player, lava){ playerLose(player); });
+	foxEngine.addCollisionEvent("player", "lava", function(player, lavaObj){ playerLose(player); });
 }
 
 /*
