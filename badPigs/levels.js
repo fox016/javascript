@@ -343,6 +343,9 @@ jsonLevels['level7'] =
 		{"x": 0, "y": 400, "width": 100, "height": 30},
 		{"x": 0, "y": 500, "width": 100, "height": 30},
 		{"x": 0, "y": 600, "width": 100, "height": 30},
+		{"x": 1900, "y": 100, "width": 100, "height": 30},
+		{"x": 1900, "y": 200, "width": 100, "height": 30},
+		{"x": 1900, "y": 300, "width": 100, "height": 30},
 	],
 	"bricks": [
 		{"x": 130, "y": 400, "width": 1770, "height": 30},
@@ -359,9 +362,9 @@ jsonLevels['level7'] =
 		{"x": 1400, "y": 370, "width": 30, "height": 30},
 		{"x": 1600, "y": 370, "width": 30, "height": 30},
 		{"x": 1800, "y": 370, "width": 30, "height": 30},
-		{"x": 200, "y": 200, "width": 1800, "height": 30},
-		{"x": 200, "y": 100, "width": 30, "height": 100},
-		{"x": 350, "y": 100, "width": 1650, "height": 30},
+		{"x": 200, "y": 200, "width": 1700, "height": 30},
+		{"x": 200, "y": 130, "width": 30, "height": 70},
+		{"x": 200, "y": 100, "width": 1700, "height": 30},
 	],
 	"stars": [
 		{"x": 35, "y": 170},
@@ -372,5 +375,5 @@ jsonLevels['level7'] =
 		{"x": 1230, "y": 370, "width": 170, "height": 30},
 		{"x": 1630, "y": 370, "width": 170, "height": 30},
 	],
-	"goal": {"x": 34, "y": 68, "action": "buildEndMessage('images/you_win.png', 'Start Over', function(){ reset('level1');});"}
+	"goal": {"x": 34, "y": 68, "action": "buildEndMessage('images/you_win.png', 'See Stats', function(){ showLevelStats(); });"}
 }

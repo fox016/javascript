@@ -3,13 +3,14 @@ var hasWeapon = false;
 var goalPos = null;
 var goalAction = null;
 var currentLevel = null;
+var levelStats = {};
 
 /*
  * @ desc Load level 1 once window is ready for it
  */
 window.onload = function()
 {
-	loadLevel("level1");
+	reset("level1");
 }
 
 /*
@@ -52,6 +53,16 @@ function reset(levelKey)
 		levelKey = currentLevel;
 	hasWeapon = false;
 	loadLevel(levelKey);
+	if(levelKey in levelStats)
+	{
+		levelStats[levelKey].lives++;
+	}
+	else
+	{
+		levelStats[levelKey] = {};
+		levelStats[levelKey].startTime = (new Date()).getTime();
+		levelStats[levelKey].lives = 1;
+	}
 }
 
 /*
@@ -386,5 +397,28 @@ function buildStars(stars)
 function playerGoalCollision(player, goal)
 {
 	goal.remove();
+	levelStats[currentLevel].endTime = (new Date()).getTime();
 	eval(goalAction);
+}
+
+/*
+ * @desc Show any stats stored in global levelStats
+ */
+function showLevelStats()
+{
+	foxEngine.destroy();
+	foxEngine.open("target", 800, 80 * Object.keys(levelStats).length + 20);
+	var yPos = 10;
+	for(level in levelStats)
+	{
+		var title = "Level: " + level + "<br/>";
+		var time = "Time: " + ((levelStats[level].endTime - levelStats[level].startTime)/1000.0) + " seconds<br/>";
+		var lives = "Tries: " + levelStats[level].lives + "<br/>";
+
+		var textObj = new foxEngine.Text(title+time+lives, 760, 60, 10, yPos, true);
+		textObj.setStyle("color", "#326699");
+		textObj.setStyle("backgroundColor", "#FDFADE");
+		textObj.setStyle("padding", "10px");
+		yPos += 80;
+	}
 }

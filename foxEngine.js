@@ -867,6 +867,7 @@ function _foxEngine()
 	 * @param {int} height - (opt, default 30)
 	 * @param {int} xPos - (opt, default 0)
 	 * @param {int} yPos - (opt, default 0)
+	 * @param {boolean} fixed - (opt, default false)
 	 */
 	this.Button = function(text, handler, width, height, xPos, yPos, fixed)
 	{
@@ -891,6 +892,50 @@ function _foxEngine()
 		engine.addComponent(this);
 	}
 	this.Button.prototype = componentObj;
+
+	/*
+	 * Text Class
+	 * @class module:foxEngine.Text
+	 * @extends modle:foxEngine.Component
+	 * @param {string} text
+	 * @param {int} width - (opt, default 100)
+	 * @param {int} height - (opt, default 30)
+	 * @param {int} xPos - (opt, default 0)
+	 * @param {int} yPos - (opt, default 0)
+	 * @param {boolean} fixed - (opt, default false)
+	 */
+	this.Text = function(text, width, height, xPos, yPos, fixed)
+	{
+		if(typeof width == "undefined")
+			width = 100;
+		if(typeof height == "undefined")
+			height = 30;
+		if(typeof xPos == "undefined")
+			xPos = 0;
+		if(typeof yPos == "undefined")
+			yPos = 0;
+		if(typeof fixed == "undefined")
+			fixed = false;
+
+		this.node = document.createElement('div');
+		this.node.innerHTML = text;
+		this.node.style.position = "absolute";
+		this.setSize(width, height);
+		this.fixed = fixed;
+		this.setComponentPosition(xPos, yPos);
+		engine.addComponent(this);
+
+		/*
+		 * @desc Set style for text div
+		 * @param {string} key - name of style element (e.g. "color", "backgroundColor", "fontSize")
+		 * @param {string} value - value to set style element to (e.g. "blue", "#FDFADE", "14pt")
+		 */
+		this.setStyle = function(key, value)
+		{
+			this.node.style[key] = value;
+		}
+	}
+	this.Text.prototype = componentObj;
 }
 
 /** @global */
