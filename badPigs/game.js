@@ -398,27 +398,39 @@ function playerGoalCollision(player, goal)
 {
 	goal.remove();
 	levelStats[currentLevel].endTime = (new Date()).getTime();
+	showLevelStats(currentLevel, 10, 10);
 	eval(goalAction);
 }
 
 /*
- * @desc Show any stats stored in global levelStats
+ * @desc Show stats for a specific level at a specific position
+ * @param {string} levelName - key into levelStats object
+ * @param {int} xPos
+ * @param {int} yPos
  */
-function showLevelStats()
+function showLevelStats(levelName, xPos, yPos)
+{
+	var title = "Level: " + levelName + "<br/>";
+	var time = "Time: " + ((levelStats[levelName].endTime - levelStats[levelName].startTime)/1000.0) + " seconds<br/>";
+	var lives = "Tries: " + levelStats[levelName].lives + "<br/>";
+
+	var textObj = new foxEngine.Text(title+time+lives, 760, 60, xPos, yPos, true);
+	textObj.setStyle("color", "#326699");
+	textObj.setStyle("backgroundColor", "#FDFADE");
+	textObj.setStyle("padding", "10px");
+}
+
+/*
+ * @desc Clear everything and show all stats stored in global levelStats
+ */
+function showAllLevelStats()
 {
 	foxEngine.destroy();
 	foxEngine.open("target", 800, 80 * Object.keys(levelStats).length + 20);
 	var yPos = 10;
 	for(level in levelStats)
 	{
-		var title = "Level: " + level + "<br/>";
-		var time = "Time: " + ((levelStats[level].endTime - levelStats[level].startTime)/1000.0) + " seconds<br/>";
-		var lives = "Tries: " + levelStats[level].lives + "<br/>";
-
-		var textObj = new foxEngine.Text(title+time+lives, 760, 60, 10, yPos, true);
-		textObj.setStyle("color", "#326699");
-		textObj.setStyle("backgroundColor", "#FDFADE");
-		textObj.setStyle("padding", "10px");
+		showLevelStats(level, 10, yPos);
 		yPos += 80;
 	}
 }

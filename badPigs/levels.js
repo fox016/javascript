@@ -375,5 +375,5 @@ jsonLevels['level7'] =
 		{"x": 1230, "y": 370, "width": 170, "height": 30},
 		{"x": 1630, "y": 370, "width": 170, "height": 30},
 	],
-	"goal": {"x": 34, "y": 68, "action": "buildEndMessage('images/you_win.png', 'See Stats', function(){ showLevelStats(); });"}
+	"goal": {"x": 34, "y": 68, "action": "buildEndMessage('images/you_win.png', 'See Stats', function(){ showAllLevelStats(); });"}
 }
