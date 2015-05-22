@@ -462,14 +462,14 @@ function playerTrampolineCollision(player, trampoline)
 	else if(player.isDirectlyLeftOf(trampoline) && player.vel_x > 0)
 	{
 		player.stopX();
-		trampoline.pushX(5000);
+		trampoline.pushX(10000);
 	}
 
 	// If coming from right, push left
 	else if(player.isDirectlyRightOf(trampoline) && player.vel_x < 0)
 	{
 		player.stopX();
-		trampoline.pushX(-5000);
+		trampoline.pushX(-10000);
 	}
 }
 
