@@ -934,6 +934,14 @@ function _foxEngine()
 		{
 			this.node.style[key] = value;
 		}
+
+		/*
+		 * @desc Set text
+		 */
+		this.setText = function(text)
+		{
+			this.node.innerHTML = text;
+		}
 	}
 	this.Text.prototype = componentObj;
 }

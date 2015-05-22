@@ -40,6 +40,7 @@ function loadEngine(levelObj)
 	buildBricks(levelObj.bricks);
 	buildLava(levelObj.lava);
 	buildStars(levelObj.stars);
+	buildTimer();
 	goalPos = levelObj.goal;
 	goalAction = levelObj.goal.action;
 }
@@ -389,6 +390,25 @@ function buildStars(stars)
 			setTimeout(function(){star.remove()}, 500);
 		}
 	});
+}
+
+/*
+ * @desc Build timer
+ */
+function buildTimer()
+{
+	var timer = new foxEngine.Text("0", 70, 30, 710, 10, true);
+	timer.setStyle("color", "red");
+	timer.setStyle("backgroundColor", "black");
+	timer.setStyle("fontSize", "18pt");
+	timer.setStyle("text-align", "center");
+
+	timer.update = function()
+	{
+		var time = ((new Date()).getTime() - levelStats[currentLevel].startTime) / 1000;
+		time = Math.floor(time);
+		timer.setText(time);
+	}
 }
 
 /*
