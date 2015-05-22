@@ -375,5 +375,49 @@ jsonLevels['level7'] =
 		{"x": 1230, "y": 370, "width": 170, "height": 30},
 		{"x": 1630, "y": 370, "width": 170, "height": 30},
 	],
-	"goal": {"x": 34, "y": 68, "action": "buildEndMessage('images/you_win.png', 'See Stats', function(){ showAllLevelStats(); });"}
+	"goal": {"x": 34, "y": 68, "action": "buildEndMessage('images/you_win.png', 'Next Level', function(){ reset('level8'); });"}
+}
+
+jsonLevels['level8'] =
+{
+	"background": {
+		"img": "images/field.jpg",
+		"width": 3000,
+		"height": 1000
+	},
+	"enemies": {
+		"vel_max_x": 150,
+		"positions": [
+			{"x": 2000, "y": 800, "dir": 1},
+			{"x": 2100, "y": 800, "dir": 1},
+			{"x": 2200, "y": 800, "dir": 1},
+			{"x": 2300, "y": 800, "dir": 1},
+			{"x": 2400, "y": 800, "dir": 1},
+			{"x": 2500, "y": 800, "dir": 1},
+			{"x": 2600, "y": 800, "dir": 1},
+			{"x": 2700, "y": 800, "dir": 1},
+			{"x": 2800, "y": 800, "dir": 1},
+			{"x": 2900, "y": 800, "dir": 1},
+		],
+	},
+	"platforms": [
+		{"x": 2000, "y": 250, "width": 100, "height": 20},
+	],
+	"bricks": [
+		{"x": 70, "y": 0, "width": 30, "height": 700},
+		{"x": 0, "y": 900, "width": 500, "height": 30},
+		{"x": 1700, "y": 900, "width": 1300, "height": 30},
+		{"x": 1700, "y": 870, "width":30, "height": 60},
+	],
+	"stars": [
+		{"x": 2000, "y": 870},
+	],
+	"lava": [
+		{"x": 0, "y": 930, "width": 3000, "height": 70},
+	],
+	"trampolines": [
+		{"x": 200, "y": 870, "jump_force": -300000},
+		{"x": 2850, "y": 870, "jump_force": -300000},
+	],
+	"goal": {"x": 2034, "y": 200, "action": "buildEndMessage('images/you_win.png', 'See Stats', function(){ showAllLevelStats(); });"}
 }

@@ -40,6 +40,7 @@ function loadEngine(levelObj)
 	buildBricks(levelObj.bricks);
 	buildLava(levelObj.lava);
 	buildStars(levelObj.stars);
+	buildTrampolines(levelObj.trampolines);
 	buildTimer();
 	goalPos = levelObj.goal;
 	goalAction = levelObj.goal.action;
@@ -254,7 +255,8 @@ function fireWeapon(component)
 	var bullet = new foxEngine.Image("images/bullet.png", 20, 20, startPos.x, startPos.y);
 	bullet.setType("bullet");
 	bullet.friction = 0.0;
-	bullet.vel_max_x = component.vel_max_x + 100;
+	bullet.vel_max_left = component.vel_max_left + 100;
+	bullet.vel_max_right = component.vel_max_right + 100;
 	bullet.pushX((component.getDirection() == LEFT ? -1 : 1) * 1000000);
 	bullet.setZIndex(1100);
 	bullet.boundInView = true;
@@ -293,7 +295,8 @@ function buildEnemies(enemies)
 		enemy.setHFlipImages("images/pig_right.png", "images/pig_left.png");
 		enemy.setType("enemy");
 		enemy.friction = 0.0;
-		enemy.vel_max_x = enemies.vel_max_x;
+		enemy.vel_max_left = enemies.vel_max_x;
+		enemy.vel_max_right = enemies.vel_max_x;
 		enemy.pushX(enemies.positions[i].dir * 1000000);
 		if(enemies.positions[i].dir > 0)
 			enemy.faceRight();
@@ -393,6 +396,27 @@ function buildStars(stars)
 }
 
 /*
+ * @desc Build trampolines that player can jump on
+ */
+function buildTrampolines(trampolines)
+{
+	if(typeof trampolines == "undefined")
+		return;
+	if(trampolines.length == 0)
+		return;
+
+	for(var i = 0; i < trampolines.length; i++)
+	{
+		var trampoline = new foxEngine.Image("images/trampoline.png", 30, 30, trampolines[i].x, trampolines[i].y);
+		trampoline.setType("trampoline");
+		trampoline.jump_force = trampolines[i].jump_force;
+		trampoline.applyGravity(true);
+	}
+	foxEngine.addCollisionEvent("player", "trampoline", playerTrampolineCollision);
+	foxEngine.addCollisionEvent("trampoline", "brick", brickCollision);
+}
+
+/*
  * @desc Build timer
  */
 function buildTimer()
@@ -420,6 +444,33 @@ function playerGoalCollision(player, goal)
 	levelStats[currentLevel].endTime = (new Date()).getTime();
 	showLevelStats(currentLevel, 10, 10);
 	eval(goalAction);
+}
+
+/*
+ * @desc Called when a player and a trampoline collide
+ */
+function playerTrampolineCollision(player, trampoline)
+{
+	// If coming from above, jump
+	if(player.isDirectlyAbove(trampoline) && player.vel_y > 0)
+	{
+		player.stopDown();
+		player.pushY(trampoline.jump_force);
+	}
+
+	// If coming from left, push right
+	else if(player.isDirectlyLeftOf(trampoline) && player.vel_x > 0)
+	{
+		player.stopX();
+		trampoline.pushX(5000);
+	}
+
+	// If coming from right, push left
+	else if(player.isDirectlyRightOf(trampoline) && player.vel_x < 0)
+	{
+		player.stopX();
+		trampoline.pushX(-5000);
+	}
 }
 
 /*

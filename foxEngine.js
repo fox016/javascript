@@ -489,8 +489,10 @@ function _foxEngine()
 
 		this.friction = 0.2;
 		this.vel_margin = 5.0; // If velocity is within vel_margin of 0, consider velocity to be 0
-		this.vel_max_x = 500;
-		this.vel_max_y = 600;
+		this.vel_max_left = 500;
+		this.vel_max_right = 500;
+		this.vel_max_up = 1200;
+		this.vel_max_down = 600;
 
 		this.isGravity = false;
 		this.gravity = 1000;
@@ -507,8 +509,8 @@ function _foxEngine()
 			// Update velocity
 			this.vel_x += (this.acc_x * t);
 			this.vel_y += (this.acc_y * t);
-			this.vel_x = engine.getBoundedValue(this.vel_x, -1 * this.vel_max_x, this.vel_max_x);
-			this.vel_y = engine.getBoundedValue(this.vel_y, -1 * this.vel_max_y, this.vel_max_y);
+			this.vel_x = engine.getBoundedValue(this.vel_x, -1 * this.vel_max_left, this.vel_max_right);
+			this.vel_y = engine.getBoundedValue(this.vel_y, -1 * this.vel_max_up, this.vel_max_down);
 
 			// Update position
 			this.pos_x += (this.vel_x * t);
