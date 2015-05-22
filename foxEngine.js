@@ -887,6 +887,7 @@ function _foxEngine()
 		this.node = document.createElement('button');
 		this.node.innerHTML = text;
 		this.node.style.position = "absolute";
+		this.node.style.cursor = "pointer";
 		this.node.onclick = handler;
 		this.setSize(width, height);
 		this.fixed = fixed;
