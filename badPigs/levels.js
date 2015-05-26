@@ -419,5 +419,69 @@ jsonLevels['level8'] =
 		{"x": 200, "y": 870, "jump_force": -300000},
 		{"x": 2850, "y": 870, "jump_force": -300000},
 	],
-	"goal": {"x": 2034, "y": 200, "action": "buildEndMessage('images/you_win.png', 'See Stats', function(){ showAllLevelStats(); });"}
+	"goal": {"x": 2034, "y": 200, "action": "buildEndMessage('images/you_win.png', 'Next Level', function(){ reset('level9'); });"}
+}
+
+jsonLevels['level9'] = 
+{
+	"background": {
+		"img": "images/night.jpg",
+		"width": 800,
+		"height": 2000
+	},
+	"enemies": {
+		"vel_max_x": 150,
+		"positions": [
+			{"x": 570, "y": 80, "dir": 1},
+			{"x": 570, "y": 280, "dir": 1},
+			{"x": 570, "y": 480, "dir": 1},
+			{"x": 570, "y": 680, "dir": 1},
+			{"x": 570, "y": 880, "dir": 1},
+			{"x": 570, "y": 1080, "dir": 1},
+			{"x": 570, "y": 1280, "dir": 1},
+			{"x": 570, "y": 1480, "dir": 1},
+			{"x": 570, "y": 1680, "dir": 1},
+			{"x": 570, "y": 1880, "dir": 1},
+			{"x": 150, "y": 180, "dir": -1},
+			{"x": 290, "y": 380, "dir": -1},
+			{"x": 290, "y": 580, "dir": -1},
+			{"x": 290, "y": 780, "dir": -1},
+			{"x": 290, "y": 980, "dir": -1},
+			{"x": 290, "y": 1180, "dir": -1},
+			{"x": 290, "y": 1380, "dir": -1},
+			{"x": 290, "y": 1580, "dir": -1},
+			{"x": 290, "y": 1780, "dir": -1},
+			{"x": 290, "y": 1980, "dir": -1},
+		],
+	},
+	"platforms": [
+		{"x": 130, "y": 200, "width": 200, "height": 30},
+		{"x": 130, "y": 400, "width": 200, "height": 30},
+		{"x": 130, "y": 600, "width": 200, "height": 30},
+		{"x": 130, "y": 800, "width": 200, "height": 30},
+		{"x": 130, "y": 1000, "width": 200, "height": 30},
+		{"x": 130, "y": 1200, "width": 200, "height": 30},
+		{"x": 130, "y": 1400, "width": 200, "height": 30},
+		{"x": 130, "y": 1600, "width": 200, "height": 30},
+		{"x": 130, "y": 1800, "width": 200, "height": 30},
+		{"x": 570, "y": 100, "width": 200, "height": 30},
+		{"x": 570, "y": 300, "width": 200, "height": 30},
+		{"x": 570, "y": 500, "width": 200, "height": 30},
+		{"x": 570, "y": 700, "width": 200, "height": 30},
+		{"x": 570, "y": 900, "width": 200, "height": 30},
+		{"x": 570, "y": 1100, "width": 200, "height": 30},
+		{"x": 570, "y": 1300, "width": 200, "height": 30},
+		{"x": 570, "y": 1500, "width": 200, "height": 30},
+		{"x": 570, "y": 1700, "width": 200, "height": 30},
+		{"x": 570, "y": 1900, "width": 200, "height": 30},
+	],
+	"bricks": [
+		{"x": 100, "y": 0, "width": 30, "height": 1830},
+		{"x": 770, "y": 0, "width": 30, "height": 2000},
+		{"x": 250, "y": 180, "width": 20, "height": 20},
+	],
+	"trampolines": [
+		{"x": 655, "y": 50, "jump_force": -300000},
+	],
+	"goal": {"x": 50, "y": 1300, "action": "buildEndMessage('images/you_win.png', 'See Stats', function(){ showAllLevelStats(); });"}
 }

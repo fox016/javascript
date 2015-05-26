@@ -414,6 +414,7 @@ function buildTrampolines(trampolines)
 	}
 	foxEngine.addCollisionEvent("player", "trampoline", playerTrampolineCollision);
 	foxEngine.addCollisionEvent("trampoline", "brick", brickCollision);
+	foxEngine.addCollisionEvent("trampoline", "platform", platformCollision);
 }
 
 /*

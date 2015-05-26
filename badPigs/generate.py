@@ -38,6 +38,38 @@ for x in xrange(430, 2000, 400):
 	print "{\"x\": "+str(x)+", \"y\": "+str(y)+", \"width\": "+str(width)+", \"height\": "+str(height) + "},"
 """
 
+"""
 y = 150
 for x in xrange(230, 2000, 60):
 	print "{\"x\": "+str(x)+", \"y\": "+str(y)+", \"dir\": 1},"
+"""
+
+"""
+x = 130
+height = 30
+width = 200
+for y in xrange(200, 2000, 200):
+	print "{\"x\": "+str(x)+", \"y\": "+str(y)+", \"width\": "+str(width)+", \"height\": "+str(height) + "},"
+
+x = 570
+for y in xrange(100, 2000, 200):
+	print "{\"x\": "+str(x)+", \"y\": "+str(y)+", \"width\": "+str(width)+", \"height\": "+str(height) + "},"
+"""
+
+"""
+x = 570
+d = 1
+for y in xrange(80, 2000, 200):
+	print "{\"x\": "+str(x)+", \"y\": "+str(y)+", \"dir\": "+str(d)+"},"
+
+x = 290
+d = -1
+for y in xrange(180, 2000, 200):
+	print "{\"x\": "+str(x)+", \"y\": "+str(y)+", \"dir\": "+str(d)+"},"
+"""
+
+width = 20
+height = 20
+x = 310
+for y in xrange(180, 1000, 200):
+	print "{\"x\": "+str(x)+", \"y\": "+str(y)+", \"width\": "+str(width)+", \"height\": "+str(height) + "},"
