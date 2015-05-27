@@ -62,7 +62,7 @@ function _foxEngine()
 	}
 
 	/*
-	 * @desc Destroy 
+	 * @desc Destroy everything, reset to defaults
 	 */
 	this.destroy = function()
 	{
@@ -79,6 +79,23 @@ function _foxEngine()
 		keyEvents = {};
 		collisionEvents = [];
 		scroll = null;
+	}
+
+	/*
+	 * @desc Pause motion
+	 */
+	this.pause = function()
+	{
+		clearInterval(this.updateInterval);
+		this.updateInterval = null;
+	}
+
+	/*
+	 * @desc Resume motion (see this.pause function)
+	 */
+	this.resume = function()
+	{
+		this.updateInterval = setInterval(this.update, this.delta_t);
 	}
 
 	/*
@@ -160,6 +177,22 @@ function _foxEngine()
 	{
 		if(key in keyEvents)
 			delete keyEvents[key];
+	}
+
+	/*
+	 * @desc Add mouse motion event
+	 * @param {string} targetId - id of element to apply event handler to,
+	 * 	or pass in null to apply event handler to window
+	 * @param {function} callback
+	 */
+	this.addMouseMoveEvent = function(targetId, callback)
+	{
+		if(typeof callback != "function")
+			callback = function(mouseMoveEvent){};
+		if(typeof targetId == "undefined" || targetId == null)
+			window.onmousemove = callback;
+		else
+			document.getElementById(targetId).onmousemove = callback;
 	}
 
 	/*
@@ -537,12 +570,12 @@ function _foxEngine()
 				this.onHitVerticalBorder();
 			}
 
-			// If trying to go out of Y range, kill momentum
+			// If trying to go out of Y range, call onHitHorizontalBorder handler
 			var boundY = engine.getBoundedValue(this.pos_y, minPosY, maxPosY);
 			if(boundY != this.pos_y)
 			{
 				this.pos_y = boundY;
-				this.stopY();
+				this.onHitHorizontalBorder();
 			}
 
 			// Set Component position
@@ -681,6 +714,15 @@ function _foxEngine()
 		this.onHitVerticalBorder = function()
 		{
 			this.stopX();
+		}
+
+		/*
+		 * @desc Defines what happens when this object hits a horizontal border
+		 * @default Kill velocity and acceleration in Y direction
+		 */
+		this.onHitHorizontalBorder = function()
+		{
+			this.stopY();
 		}
 
 		/*
