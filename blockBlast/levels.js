@@ -60,27 +60,27 @@ jsonLevels['level2'] =
 jsonLevels['level3'] =
 {
 	"ball": {
-		"x": 50,
+		"x": 300,
 		"y": 50,
 		"vel_x": 300,
 		"vel_y": 300,
 		"vel_max": 500
 	},
 	"blocks": [
-	{"x": 15, "y": 0, "width": 70, "height": 30, "color": "rgb(65,215,200)", "border": "rgb(0,0,0)"},
-	{"x": 115, "y": 0, "width": 70, "height": 30, "color": "rgb(65,215,200)", "border": "rgb(0,0,0)"},
-	{"x": 215, "y": 0, "width": 70, "height": 30, "color": "rgb(65,215,200)", "border": "rgb(0,0,0)"},
-	{"x": 315, "y": 0, "width": 70, "height": 30, "color": "rgb(65,215,200)", "border": "rgb(0,0,0)"},
-	{"x": 415, "y": 0, "width": 70, "height": 30, "color": "rgb(65,215,200)", "border": "rgb(0,0,0)"},
-	{"x": 515, "y": 0, "width": 70, "height": 30, "color": "rgb(65,215,200)", "border": "rgb(0,0,0)"},
-	{"x": 615, "y": 0, "width": 70, "height": 30, "color": "rgb(65,215,200)", "border": "rgb(0,0,0)"},
-	{"x": 715, "y": 0, "width": 70, "height": 30, "color": "rgb(65,215,200)", "border": "rgb(0,0,0)"},
+		{"x": 15, "y": 0, "width": 70, "height": 30, "color": "rgb(65,215,200)", "border": "rgb(0,0,0)"},
+		{"x": 115, "y": 0, "width": 70, "height": 30, "color": "rgb(65,215,200)", "border": "rgb(0,0,0)"},
+		{"x": 215, "y": 0, "width": 70, "height": 30, "color": "rgb(65,215,200)", "border": "rgb(0,0,0)"},
+		{"x": 315, "y": 0, "width": 70, "height": 30, "color": "rgb(65,215,200)", "border": "rgb(0,0,0)"},
+		{"x": 415, "y": 0, "width": 70, "height": 30, "color": "rgb(65,215,200)", "border": "rgb(0,0,0)"},
+		{"x": 515, "y": 0, "width": 70, "height": 30, "color": "rgb(65,215,200)", "border": "rgb(0,0,0)"},
+		{"x": 615, "y": 0, "width": 70, "height": 30, "color": "rgb(65,215,200)", "border": "rgb(0,0,0)"},
+		{"x": 715, "y": 0, "width": 70, "height": 30, "color": "rgb(65,215,200)", "border": "rgb(0,0,0)"},
 	],
 	"bricks": [
-	{"x": 50, "y": 300, "width": 100, "height": 30, "color": "rgb(255,100,100)", "border": "rgb(0,0,0)"},
-	{"x": 250, "y": 300, "width": 100, "height": 30, "color": "rgb(255,100,100)", "border": "rgb(0,0,0)"},
-	{"x": 450, "y": 300, "width": 100, "height": 30, "color": "rgb(255,100,100)", "border": "rgb(0,0,0)"},
-	{"x": 650, "y": 300, "width": 100, "height": 30, "color": "rgb(255,100,100)", "border": "rgb(0,0,0)"},
+		{"x": 50, "y": 230, "width": 100, "height": 30, "color": "rgb(255,100,100)", "border": "rgb(0,0,0)"},
+		{"x": 250, "y": 230, "width": 100, "height": 30, "color": "rgb(255,100,100)", "border": "rgb(0,0,0)"},
+		{"x": 450, "y": 230, "width": 100, "height": 30, "color": "rgb(255,100,100)", "border": "rgb(0,0,0)"},
+		{"x": 650, "y": 230, "width": 100, "height": 30, "color": "rgb(255,100,100)", "border": "rgb(0,0,0)"},
 	],
 	"action": "buildEndMessage('images/you_win.png', 'See Stats', function() { showAllLevelStats();});"
 }

@@ -71,8 +71,10 @@ function buildPlayer()
 {
 	var player = new foxEngine.Image("images/platform.png", 100, 20);
 	player.setType("player");
-	player.vel_max_x = 5000;
-	player.friction = 0;
+	player.vel_max_x = 800;
+	player.vel_max_left = player.vel_max_x;
+	player.vel_max_right = player.vel_max_x;
+	player.friction = 0.2;
 	player.setZIndex(1000);
 	player.setPosition(350, playerY);
 	return player;
@@ -149,7 +151,7 @@ function buildBall(ball, player)
 function buildEndMessage(imgSrc, buttonText, buttonFunction)
 {
 	foxEngine.pause();
-	document.getElementById("target").style.cursor = "auto";
+	//document.getElementById("target").style.cursor = "auto";
 
 	var width = 200; var height = 200;
 	var xPos = foxEngine.getWidth() / 2 - width / 2;
@@ -170,7 +172,7 @@ function buildEndMessage(imgSrc, buttonText, buttonFunction)
 function setMouseEvents(player)
 {
 	// Move left and right
-	document.getElementById("target").style.cursor = "none";
+	//document.getElementById("target").style.cursor = "none";
 	foxEngine.addMouseMoveEvent("target", function(mouseMoveEvent) {
 		mouseX = mouseMoveEvent.pageX - document.getElementById("target").offsetLeft;
 		if(mouseInterval == null)
@@ -238,17 +240,21 @@ function bounceOffComponent(ball, component)
 	else if(ball.vel_x < 0)
 		distRight = ball.isDirectlyRightOf(component)[1];
 
-	if(distAbove <= distLeft && distAbove <= distRight) {
+	if(distAbove < distLeft && distAbove < distRight) {
 		ball.reverseY();
+		ball.placeAbove(component);
 	}
-	else if(distLeft <= distAbove && distLeft <= distBelow) {
+	else if(distLeft < distAbove && distLeft < distBelow) {
 		ball.reverseX();
+		ball.placeLeftOf(component);
 	}
-	else if(distRight <= distAbove && distRight <= distBelow) {
+	else if(distRight < distAbove && distRight < distBelow) {
 		ball.reverseX();
+		ball.placeRightOf(component);
 	}
-	else if(distBelow <= distLeft && distBelow <= distRight) {
+	else if(distBelow < distLeft && distBelow < distRight) {
 		ball.reverseY();
+		ball.placeBelow(component);
 	}
 }
 
