@@ -34,7 +34,7 @@ function loadEngine(levelObj)
 	setMouseEvents(player);
 
 	buildBlocks(levelObj.blocks);
-	// TODO create a type of invincible block
+	buildBricks(levelObj.bricks);
 	buildBall(levelObj.ball, player);
 	winAction = levelObj.action;
 }
@@ -87,9 +87,28 @@ function buildBlocks(blocks)
 	{
 		var block = new foxEngine.Text("", blocks[i].width, blocks[i].height, blocks[i].x, blocks[i].y, true);
 		block.setStyle("backgroundColor", blocks[i].color);
+		block.setStyle("border", "2px solid " + blocks[i].border);
 		block.setType("block");
 	}
 	foxEngine.addCollisionEvent("ball", "block", ballBlockCollision);
+}
+
+/*
+ * @desc Build bricks
+ */
+function buildBricks(bricks)
+{
+	if(typeof bricks == "undefined")
+		return;
+
+	for(var i = 0; i < bricks.length; i++)
+	{
+		var brick = new foxEngine.Text("", bricks[i].width, bricks[i].height, bricks[i].x, bricks[i].y, true);
+		brick.setStyle("backgroundColor", bricks[i].color);
+		brick.setStyle("border", "2px solid " + bricks[i].border);
+		brick.setType("brick");
+	}
+	foxEngine.addCollisionEvent("ball", "brick", ballBrickCollision);
 }
 
 /*
@@ -130,7 +149,7 @@ function buildBall(ball, player)
 function buildEndMessage(imgSrc, buttonText, buttonFunction)
 {
 	foxEngine.pause();
-	//document.getElementById("target").style.cursor = "auto";
+	document.getElementById("target").style.cursor = "auto";
 
 	var width = 200; var height = 200;
 	var xPos = foxEngine.getWidth() / 2 - width / 2;
@@ -151,7 +170,7 @@ function buildEndMessage(imgSrc, buttonText, buttonFunction)
 function setMouseEvents(player)
 {
 	// Move left and right
-	//document.getElementById("target").style.cursor = "none";
+	document.getElementById("target").style.cursor = "none";
 	foxEngine.addMouseMoveEvent("target", function(mouseMoveEvent) {
 		mouseX = mouseMoveEvent.pageX - document.getElementById("target").offsetLeft;
 		if(mouseInterval == null)
@@ -188,21 +207,36 @@ function playerLose(player)
  */
 function ballBlockCollision(ball, block)
 {
-	// TODO create objects within some blocks
+	bounceOffComponent(ball, block);
+	removeBlock(block);
+}
 
+/*
+ * @desc Define what happens when a ball and a brick collide
+ */
+function ballBrickCollision(ball, brick)
+{
+	bounceOffComponent(ball, brick);
+}
+
+/*
+ * @desc Bounce ball of of a component (like a block or a brick)
+ */
+function bounceOffComponent(ball, component)
+{
 	var distAbove = Number.POSITIVE_INFINITY;
 	var distBelow = Number.POSITIVE_INFINITY;
 	var distLeft = Number.POSITIVE_INFINITY;
 	var distRight = Number.POSITIVE_INFINITY;
 
 	if(ball.vel_y >= 0)
-		distAbove = ball.isDirectlyAbove(block)[1];
+		distAbove = ball.isDirectlyAbove(component)[1];
 	else
-		distBelow = ball.isDirectlyBelow(block)[1];
+		distBelow = ball.isDirectlyBelow(component)[1];
 	if(ball.vel_x > 0)
-		distLeft = ball.isDirectlyLeftOf(block)[1];
+		distLeft = ball.isDirectlyLeftOf(component)[1];
 	else if(ball.vel_x < 0)
-		distRight = ball.isDirectlyRightOf(block)[1];
+		distRight = ball.isDirectlyRightOf(component)[1];
 
 	if(distAbove <= distLeft && distAbove <= distRight) {
 		ball.reverseY();
@@ -216,8 +250,6 @@ function ballBlockCollision(ball, block)
 	else if(distBelow <= distLeft && distBelow <= distRight) {
 		ball.reverseY();
 	}
-
-	removeBlock(block);
 }
 
 /*
