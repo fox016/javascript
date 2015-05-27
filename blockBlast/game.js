@@ -2,6 +2,9 @@
 var winAction = null;
 var currentLevel = null;
 var levelStats = {};
+var playerY = 450;
+var mouseX = 0;
+var mouseInterval = null;
 
 /*
  * @ desc Load level 1 once window is ready for it
@@ -31,6 +34,7 @@ function loadEngine(levelObj)
 	setMouseEvents(player);
 
 	buildBlocks(levelObj.blocks);
+	// TODO create a type of invincible block
 	buildBall(levelObj.ball, player);
 	winAction = levelObj.action;
 }
@@ -42,6 +46,11 @@ function reset(levelKey)
 {
 	if(typeof levelKey == "undefined")
 		levelKey = currentLevel;
+	if(mouseInterval != null)
+	{
+		window.clearInterval(mouseInterval);
+		mouseInterval = null;
+	}
 	loadLevel(levelKey);
 	if(levelKey in levelStats)
 	{
@@ -62,8 +71,10 @@ function buildPlayer()
 {
 	var player = new foxEngine.Image("images/platform.png", 100, 20);
 	player.setType("player");
+	player.vel_max_x = 5000;
+	player.friction = 0;
 	player.setZIndex(1000);
-	player.setPosition(350, 450);
+	player.setPosition(350, playerY);
 	return player;
 }
 
@@ -119,6 +130,7 @@ function buildBall(ball, player)
 function buildEndMessage(imgSrc, buttonText, buttonFunction)
 {
 	foxEngine.pause();
+	//document.getElementById("target").style.cursor = "auto";
 
 	var width = 200; var height = 200;
 	var xPos = foxEngine.getWidth() / 2 - width / 2;
@@ -134,16 +146,33 @@ function buildEndMessage(imgSrc, buttonText, buttonFunction)
 }
 
 /*
- * @desc Set mouse events to apply to targetObj
+ * @desc Set mouse events to apply to player
  */
-function setMouseEvents(targetObj)
+function setMouseEvents(player)
 {
 	// Move left and right
+	//document.getElementById("target").style.cursor = "none";
 	foxEngine.addMouseMoveEvent("target", function(mouseMoveEvent) {
-		// TODO change acceleration of targetObj instead of position, make acceleration proportional to distance from mouse to center of target
-		targetObj.setPosition(mouseMoveEvent.pageX - 
-			document.getElementById("target").offsetLeft - targetObj.getWidth()/2, targetObj.y);
+		mouseX = mouseMoveEvent.pageX - document.getElementById("target").offsetLeft;
+		if(mouseInterval == null)
+			mouseInterval = setInterval(function() { goTowardsMouse(player); }, foxEngine.delta_t);
 	});
+}
+
+/*
+ * @desc Drag the player towards the last recorded mouse position
+ */
+function goTowardsMouse(player)
+{
+	var playerX = player.x + player.getWidth()/2;
+	var distance = mouseX - playerX;
+	player.vel_x = 30 * distance;
+	if(distance >= -15 && distance <= 15)
+	{
+		window.clearInterval(mouseInterval);
+		mouseInterval = null;
+		player.vel_x = 0;
+	}
 }
 
 /*
@@ -151,7 +180,6 @@ function setMouseEvents(targetObj)
  */
 function playerLose(player)
 {
-	// TODO incorporate fixed number of lives
 	buildEndMessage("images/you_lose.jpg", "Try Again", function(){ reset(currentLevel); });
 }
 
@@ -192,10 +220,16 @@ function ballBlockCollision(ball, block)
 	removeBlock(block);
 }
 
+/*
+ * @desc Define what happens when a ball collides with the player
+ */
 function ballPlayerCollision(ball, player)
 {
 	if(ball.vel_y >=0 && ball.isDirectlyAbove(player)[0])
+	{
 		ball.reverseY();
+		ball.vel_x += foxEngine.getBoundedValue(player.vel_x, -1 * player.vel_max_x, player.vel_max_x);
+	}
 }
 
 /*
