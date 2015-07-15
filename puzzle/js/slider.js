@@ -60,9 +60,9 @@ function Slider()
 	 */
 	var dragBall = function(evt)
 	{
-		evt.preventDefault();
 		if(isDragging)
 		{
+			evt.preventDefault();
 			var pos = getBoundedValue(evt.pageX - trackObj.offsetLeft - (ballObj.offsetWidth/2), 0, trackObj.offsetWidth - ballObj.offsetWidth);
 			ballObj.style.left = pos + "px";
 			colorTrackObj.style.width = pos + "px";
