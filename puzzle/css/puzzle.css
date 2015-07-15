@@ -1,0 +1,35 @@
+body {
+	background-image:url("../images/wood.jpg");
+}
+#uploadDiv {
+	text-align:center;
+	margin:20px 0px;
+}
+#imagePreviewDiv {
+	text-align:center;
+}
+#sizeDiv {
+}
+#startDiv {
+	text-align:center;
+	margin:20px 0px;
+}
+#imagePreview {
+	text-align:center;
+	vertical-align:middle;
+	width:300px;
+	height:300px;
+}
+.greenBtn {
+	font-size: 1.5em;
+	padding: 10px 30px;
+	font-family: fantasy;
+	font-weight: 900;
+	border: 3px outset rgb(66, 57, 140);
+	border-radius: 5px;
+	cursor: pointer;
+	background: radial-gradient(rgb(70, 199, 70) 30%, rgb(54, 139, 54), rgb(0, 125, 0));
+}
+.greenBtn:hover {
+	background: radial-gradient(rgb(80, 209, 80) 30%, rgb(64, 149, 64), rgb(10, 135, 10));
+}
