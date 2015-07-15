@@ -1,14 +1,18 @@
 body {
 	background-image:url("../images/wood.jpg");
 }
+.left {
+	text-align:left;
+}
+.right {
+	text-align:right;
+}
 #uploadDiv {
 	text-align:center;
 	margin:20px 0px;
 }
 #imagePreviewDiv {
 	text-align:center;
-}
-#sizeDiv {
 }
 #startDiv {
 	text-align:center;
@@ -32,4 +36,32 @@ body {
 }
 .greenBtn:hover {
 	background: radial-gradient(rgb(80, 209, 80) 30%, rgb(64, 149, 64), rgb(10, 135, 10));
+}
+#sizeDiv {
+	text-align:center;
+	width:400px;
+	margin:20px auto 0px auto;
+	font-size:1.3em;
+	font-family:sans-serif;
+	background-color:rgba(32,32,32,0.75);
+	color:rgb(224,197,60);
+	padding:10px 0px;
+}
+#sizeTable {
+	margin:0px auto;
+	width:80%;
+}
+#sliderTrack {
+	width: 80%;
+	height: 5px;
+	background-color: rgb(105, 105, 105);
+	margin: 30px auto;
+}
+#sliderBall {
+	width:30px;
+	height:30px;
+	background-color:white;
+	border-radius:15px;
+	position:relative;
+	top:-13px;
 }

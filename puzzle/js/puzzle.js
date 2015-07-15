@@ -1,5 +1,8 @@
-var documentHandler = null;
+var slider = null;
 
+/*
+ * Initialize components
+ */
 window.onload = function()
 {
 	document.getElementById("uploadBtn").onclick = function()
@@ -7,8 +10,15 @@ window.onload = function()
                 document.fileForm.fileSelect.addEventListener('change', handleFileSelect, false);
                 document.fileForm.fileSelect.click();
 	};
+
+	slider = new Slider();
+	slider.init("sliderTrack", "sliderBall", [4, 9, 16, 25]);
 }
 
+/*
+ * Respond to file select
+ * Read in image and replace imagePreview space
+ */
 function handleFileSelect(evt)
 {
 	var file = evt.target.files[0];
@@ -28,6 +38,9 @@ function handleFileSelect(evt)
 	reader.readAsDataURL(file);
 }
 
+/*
+ * Array of valid file types
+ */
 var validFileTypes = [
 	"image/png",
 	"image/jpg",

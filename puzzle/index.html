@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script type='text/javascript' src='js/slider.js'></script>
 		<script type='text/javascript' src='js/puzzle.js'></script>
 		<link type='text/css' rel='stylesheet' href='css/puzzle.css' />
 	</head>
@@ -13,6 +14,15 @@
 			<img id='imagePreview' src='images/blankImage.png'>
 		</div>
 		<div id='sizeDiv'>
+			<table id='sizeTable'>
+				<tr>
+					<td class='left'>Size:</td>
+					<td class='right' style='color:white'>4 Pieces</td>
+				</tr>
+			</table>
+			<div id='sliderTrack'>
+				<div id='sliderBall'></div>
+			</div>
 		</div>
 		<div id='startDiv'>
 			<button id='startBtn' class='greenBtn'>Start</button>
