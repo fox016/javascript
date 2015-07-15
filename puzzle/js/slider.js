@@ -2,12 +2,16 @@ function Slider()
 {
 	var trackObj = null;
 	var ballObj = null;
-	var colorTrackObj;
+	var colorTrackObj = null;
+
 	var values = [];
 	var setValueCallback = function(){};
 
 	var isDragging = false;
 
+	/*
+	 * Initialize slider object
+	 */
 	this.init = function(trackId, ballId, colorTrackId, valueArray, callback)
 	{
 		trackObj = document.getElementById(trackId);
@@ -19,29 +23,44 @@ function Slider()
 		addEventListeners();
 	}
 
+	/*
+	 * Add mouse and touch event listeners to sliding ball
+	 */
 	var addEventListeners = function()
 	{
 		ballObj.addEventListener('mousedown', dragStart, false);
-		trackObj.addEventListener('mousemove', dragBall, false);
+		window.addEventListener('mousemove', dragBall, false);
 		window.addEventListener('mouseup', dragEnd, false);
 
 		ballObj.addEventListener('touchstart', dragStart, false);
-		trackObj.addEventListener('touchmove', dragBall, false);
+		window.addEventListener('touchmove', dragBall, false);
 		window.addEventListener('touchend', dragEnd, false);
 	}
 
+	/*
+	 * Start drag
+	 */
 	var dragStart = function(evt)
 	{
+		evt.preventDefault();
 		isDragging = true;
 	}
 
+	/*
+	 * End drag
+	 */
 	var dragEnd = function(evt)
 	{
+		evt.preventDefault();
 		isDragging = false;
 	}
 
+	/*
+	 * Drag the ball across the slider
+	 */
 	var dragBall = function(evt)
 	{
+		evt.preventDefault();
 		if(isDragging)
 		{
 			var pos = getBoundedValue(evt.pageX - trackObj.offsetLeft - (ballObj.offsetWidth/2), 0, trackObj.offsetWidth - ballObj.offsetWidth);
@@ -58,6 +77,9 @@ function Slider()
 		}
 	}
 
+	/*
+	 * Return value bounded by min and max
+	 */
 	var getBoundedValue = function(value, min, max)
 	{
 		return Math.min(Math.max(value, min), max);
