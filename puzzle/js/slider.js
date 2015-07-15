@@ -5,6 +5,7 @@ function Slider()
 	var colorTrackObj = null;
 
 	var values = [];
+	var selectedValue = null;
 	var setValueCallback = function(){};
 
 	var isDragging = false;
@@ -20,9 +21,18 @@ function Slider()
 
 		values = valueArray;
 		setValueCallback = callback;
-		setValueCallback(values[0]);
+		selectedValue = values[0];
+		setValueCallback(selectedValue);
 
 		addEventListeners();
+	}
+
+	/*
+	 * Get value that the slider has last selected
+	 */
+	this.getValue = function()
+	{
+		return selectedValue;
 	}
 
 	/*
@@ -70,7 +80,11 @@ function Slider()
 			{
 				if(pos < (i+1) * trackObj.offsetWidth / values.length)
 				{
-					setValueCallback(values[i]);
+					if(selectedValue != values[i])
+					{
+						selectedValue = values[i];
+						setValueCallback(selectedValue);
+					}
 					break;
 				}
 			}
