@@ -17,6 +17,7 @@ function Slider()
 		trackObj = document.getElementById(trackId);
 		ballObj = document.getElementById(ballId);
 		colorTrackObj = document.getElementById(colorTrackId);
+
 		values = valueArray;
 		setValueCallback = callback;
 

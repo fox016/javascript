@@ -21,6 +21,37 @@ window.onload = function()
 function setSliderValue(value)
 {
 	document.getElementById("sizeLabel").innerHTML = value + " Pieces";
+
+	var imageParent = document.getElementById("imagePreviewDiv");
+	var imageObj = document.getElementById("imagePreview");
+
+	var overlayObj = document.getElementById("overlayTable");
+	if(overlayObj != null) imageParent.removeChild(overlayObj);
+
+	var overlay = document.createElement("table");
+	overlay.id = "overlayTable";
+	overlay.style.position = "absolute";
+	overlay.style.width = imageObj.offsetWidth + "px";
+	overlay.style.height = imageObj.offsetHeight + "px";
+	overlay.style.left = imageObj.offsetLeft + "px";
+	overlay.style.top = imageObj.offsetTop + "px";
+	overlay.style.zindex = 5;
+	overlay.style.border = "2px solid black";
+	overlay.style.borderCollapse = "collapse";
+
+	var size = Math.sqrt(value);
+	for(var i = 0; i < size; i++)
+	{
+		var row = document.createElement("tr");
+		for(var j = 0; j < size; j++)
+		{
+			var cell = document.createElement("td");
+			cell.style.border = "2px solid black";
+			row.appendChild(cell);
+		}
+		overlay.appendChild(row);
+	}
+	imageParent.appendChild(overlay);
 }
 
 /*
