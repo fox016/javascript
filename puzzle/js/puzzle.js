@@ -36,7 +36,7 @@ function setSliderValue(value)
 	overlay.style.left = imageObj.offsetLeft + "px";
 	overlay.style.top = imageObj.offsetTop + "px";
 	overlay.style.zindex = 5;
-	overlay.style.border = "2px solid black";
+	overlay.style.border = "2px groove white";
 	overlay.style.borderCollapse = "collapse";
 
 	var size = Math.sqrt(value);
@@ -46,7 +46,7 @@ function setSliderValue(value)
 		for(var j = 0; j < size; j++)
 		{
 			var cell = document.createElement("td");
-			cell.style.border = "2px solid black";
+			cell.style.border = "2px groove white";
 			row.appendChild(cell);
 		}
 		overlay.appendChild(row);

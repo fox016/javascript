@@ -20,6 +20,7 @@ function Slider()
 
 		values = valueArray;
 		setValueCallback = callback;
+		setValueCallback(values[0]);
 
 		addEventListeners();
 	}
