@@ -1,4 +1,5 @@
 var slider = null;
+var selectedPiece = null;
 
 /*
  * Initialize components
@@ -10,6 +11,16 @@ window.onload = function()
                 document.fileForm.fileSelect.addEventListener('change', handleFileSelect, false);
                 document.fileForm.fileSelect.click();
 	};
+
+	document.getElementById("startBtn").onclick = function()
+	{
+		buildPuzzle();
+	};
+
+	window.addEventListener("mousemove", dragPiece, false);
+	window.addEventListener("touchmove", dragPiece, false);
+	window.addEventListener("mouseup", dropPiece, false);
+	window.addEventListener("touchend", dropPiece, false);
 
 	slider = new Slider();
 	slider.init("sliderTrack", "sliderBall", "sliderColor", [4, 9, 16, 25], setSliderValue);
@@ -87,3 +98,75 @@ var validFileTypes = [
 	"image/gif",
 	"image/tiff",
 ];
+
+/*
+ * Build puzzle pieces from image and size inputs
+ */
+function buildPuzzle()
+{
+	clearPuzzle();
+	var puzzleCanvas = document.getElementById("puzzleCanvas");
+	var imageObj = document.getElementById("imagePreview");
+
+	var size = Math.sqrt(slider.getValue());
+	for(var row=0; row < size; row++)
+	{
+		for(col=0; col < size; col++)
+		{
+			var piece = document.createElement("div");
+			var pieceSize = imageObj.offsetWidth / size;
+			piece.style.cursor = "pointer";
+			piece.style.width = pieceSize + "px";
+			piece.style.height = pieceSize + "px";
+			piece.style.backgroundImage = "url('" + imageObj.src + "')";
+			piece.style.backgroundSize = imageObj.offsetWidth + "px " + imageObj.offsetHeight + "px";
+			piece.style.backgroundRepeat = "no-repeat";
+			piece.style.backgroundPositionX = -1 * col * pieceSize + "px";
+			piece.style.backgroundPositionY = -1 * row * pieceSize + "px";
+			piece.style.position = "absolute";
+			piece.style.top = Math.floor(Math.random() * imageObj.offsetHeight * 1.5 + puzzleCanvas.offsetTop) + "px";
+			piece.style.left = Math.floor(Math.random() * (0.8*window.innerWidth) + (0.1*window.innerWidth)) + "px";
+			piece.addEventListener("mousedown", function(evt) { selectedPiece = this; }, false);
+			piece.addEventListener("touchstart", function(evt) { selectedPiece = this; }, false);
+			puzzleCanvas.appendChild(piece);
+		}
+	}
+}
+
+/*
+ * Remove all elements from puzzle canvas
+ */
+function clearPuzzle()
+{
+	var puzzleCanvas = document.getElementById("puzzleCanvas");
+	while(puzzleCanvas.firstChild) {
+		puzzleCanvas.removeChild(puzzleCanvas.firstChild);
+	}
+}
+
+/*
+ * React to a mouse drag event when a piece has been selected
+ */
+function dragPiece(evt)
+{
+	if(selectedPiece != null)
+	{
+		var puzzleCanvas = document.getElementById("puzzleCanvas");
+		evt.preventDefault();
+		selectedPiece.style.boxShadow = "0px 0px 20px 1px";
+		selectedPiece.style.top = slider.getBoundedValue(evt.pageY - selectedPiece.offsetHeight/2,  puzzleCanvas.offsetTop, Number.MAX_VALUE) + "px";
+		selectedPiece.style.left = evt.pageX - selectedPiece.offsetWidth/2 + "px";
+	}
+}
+
+/*
+ * React to a mouseup event when a piece is being dragged
+ */
+function dropPiece(evt)
+{
+	if(selectedPiece != null)
+	{
+		selectedPiece.style.boxShadow = "none";
+		selectedPiece = null;
+	}
+}

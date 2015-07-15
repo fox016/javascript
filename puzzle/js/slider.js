@@ -10,6 +10,8 @@ function Slider()
 
 	var isDragging = false;
 
+	var slider = this;
+
 	/*
 	 * Initialize slider object
 	 */
@@ -33,6 +35,14 @@ function Slider()
 	this.getValue = function()
 	{
 		return selectedValue;
+	}
+
+	/*
+	 * Return value bounded by min and max
+	 */
+	this.getBoundedValue = function(value, min, max)
+	{
+		return Math.min(Math.max(value, min), max);
 	}
 
 	/*
@@ -73,7 +83,7 @@ function Slider()
 		if(isDragging)
 		{
 			evt.preventDefault();
-			var pos = getBoundedValue(evt.pageX - trackObj.offsetLeft - (ballObj.offsetWidth/2), 0, trackObj.offsetWidth - ballObj.offsetWidth);
+			var pos = slider.getBoundedValue(evt.pageX - trackObj.offsetLeft - (ballObj.offsetWidth/2), 0, trackObj.offsetWidth - ballObj.offsetWidth);
 			ballObj.style.left = pos + "px";
 			colorTrackObj.style.width = pos + "px";
 			for(var i = 0; i < values.length; i++)
@@ -89,13 +99,5 @@ function Slider()
 				}
 			}
 		}
-	}
-
-	/*
-	 * Return value bounded by min and max
-	 */
-	var getBoundedValue = function(value, min, max)
-	{
-		return Math.min(Math.max(value, min), max);
 	}
 }

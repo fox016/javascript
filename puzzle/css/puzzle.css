@@ -79,3 +79,6 @@ body {
 	text-align:right;
 	color:white;
 }
+#puzzleCanvas {
+	min-height:500px;
+}
