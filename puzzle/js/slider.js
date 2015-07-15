@@ -20,6 +20,10 @@ function Slider()
 		ballObj.addEventListener('mousedown', dragStart, false);
 		trackObj.addEventListener('mousemove', dragBall, false);
 		window.addEventListener('mouseup', dragEnd, false);
+
+		ballObj.addEventListener('touchstart', dragStart, false);
+		trackObj.addEventListener('touchmove', dragBall, false);
+		window.addEventListener('touchend', dragEnd, false);
 	}
 
 	var dragStart = function(evt)
