@@ -2,20 +2,24 @@ function Slider()
 {
 	var trackObj = null;
 	var ballObj = null;
+	var colorTrackObj;
 	var values = [];
+	var setValueCallback = function(){};
 
 	var isDragging = false;
 
-	this.init = function(trackId, ballId, valueArray)
+	this.init = function(trackId, ballId, colorTrackId, valueArray, callback)
 	{
 		trackObj = document.getElementById(trackId);
 		ballObj = document.getElementById(ballId);
+		colorTrackObj = document.getElementById(colorTrackId);
 		values = valueArray;
+		setValueCallback = callback;
 
-		addMouseListener();
+		addEventListeners();
 	}
 
-	var addMouseListener = function()
+	var addEventListeners = function()
 	{
 		ballObj.addEventListener('mousedown', dragStart, false);
 		trackObj.addEventListener('mousemove', dragBall, false);
@@ -42,6 +46,15 @@ function Slider()
 		{
 			var pos = getBoundedValue(evt.pageX - trackObj.offsetLeft - (ballObj.offsetWidth/2), 0, trackObj.offsetWidth - ballObj.offsetWidth);
 			ballObj.style.left = pos + "px";
+			colorTrackObj.style.width = pos + "px";
+			for(var i = 0; i < values.length; i++)
+			{
+				if(pos < (i+1) * trackObj.offsetWidth / values.length)
+				{
+					setValueCallback(values[i]);
+					break;
+				}
+			}
 		}
 	}
 

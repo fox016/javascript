@@ -12,7 +12,15 @@ window.onload = function()
 	};
 
 	slider = new Slider();
-	slider.init("sliderTrack", "sliderBall", [4, 9, 16, 25]);
+	slider.init("sliderTrack", "sliderBall", "sliderColor", [4, 9, 16, 25], setSliderValue);
+}
+
+/*
+ * Called when the slider changes position
+ */
+function setSliderValue(value)
+{
+	document.getElementById("sizeLabel").innerHTML = value + " Pieces";
 }
 
 /*
