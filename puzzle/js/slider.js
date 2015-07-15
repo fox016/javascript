@@ -43,7 +43,6 @@ function Slider()
 	 */
 	var dragStart = function(evt)
 	{
-		evt.preventDefault();
 		isDragging = true;
 	}
 
@@ -52,7 +51,6 @@ function Slider()
 	 */
 	var dragEnd = function(evt)
 	{
-		evt.preventDefault();
 		isDragging = false;
 	}
 
