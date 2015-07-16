@@ -1,5 +1,6 @@
-var slider = null;
-var selectedPiece = null;
+var slider = null; // Object that handles slider animation
+var selectedPiece = null; // Piece that is being dragged
+var puzzlePieces = null; // 2D array of puzzle pieces
 
 /*
  * Initialize components
@@ -109,8 +110,10 @@ function buildPuzzle()
 	var imageObj = document.getElementById("imagePreview");
 
 	var size = Math.sqrt(slider.getValue());
+	puzzlePieces = [];
 	for(var row=0; row < size; row++)
 	{
+		var column = [];
 		for(col=0; col < size; col++)
 		{
 			var piece = document.createElement("div");
@@ -126,10 +129,17 @@ function buildPuzzle()
 			piece.style.position = "absolute";
 			piece.style.top = Math.floor(Math.random() * imageObj.offsetHeight * 1.5 + puzzleCanvas.offsetTop) + "px";
 			piece.style.left = Math.floor(Math.random() * (0.8*window.innerWidth) + (0.1*window.innerWidth)) + "px";
-			piece.addEventListener("mousedown", function(evt) { selectedPiece = this; }, false);
-			piece.addEventListener("touchstart", function(evt) { selectedPiece = this; }, false);
+			piece.puzzleRow = row;
+			piece.puzzleCol = col;
+			piece.hashCode = row * 10 + col;
+			piece.group = new HashSet();
+			piece.group.add(piece);
+			piece.addEventListener("mousedown", function(evt) { grabPiece(this, evt); }, false);
+			piece.addEventListener("touchstart", function(evt) { grabPiece(this, evt); }, false);
 			puzzleCanvas.appendChild(piece);
+			column.push(piece);
 		}
+		puzzlePieces.push(column);
 	}
 }
 
@@ -145,17 +155,36 @@ function clearPuzzle()
 }
 
 /*
+ * React to a mouse down event on a puzzle piece to select the piece
+ */
+function grabPiece(piece, evt)
+{
+	selectedPiece = piece;
+	var groupList = selectedPiece.group.toList();
+	for(var i = 0; i < groupList.length; i++)
+	{
+		groupList[i].dragStart = {x: evt.pageX, y: evt.pageY};
+		groupList[i].pieceStart = {x: groupList[i].offsetLeft, y: groupList[i].offsetTop};
+	}
+}
+
+/*
  * React to a mouse drag event when a piece has been selected
  */
 function dragPiece(evt)
 {
 	if(selectedPiece != null)
 	{
-		var puzzleCanvas = document.getElementById("puzzleCanvas");
+//		var puzzleCanvas = document.getElementById("puzzleCanvas");
 		evt.preventDefault();
-		selectedPiece.style.boxShadow = "0px 0px 20px 1px";
-		selectedPiece.style.top = slider.getBoundedValue(evt.pageY - selectedPiece.offsetHeight/2,  puzzleCanvas.offsetTop, Number.MAX_VALUE) + "px";
-		selectedPiece.style.left = evt.pageX - selectedPiece.offsetWidth/2 + "px";
+		var groupList = selectedPiece.group.toList();
+		for(var i = 0; i < groupList.length; i++)
+		{
+			groupList[i].style.boxShadow = "0px 0px 20px 1px";
+//			groupList[i].style.top = slider.getBoundedValue(groupList[i].pieceStart.y + evt.pageY - groupList[i].dragStart.y,  puzzleCanvas.offsetTop, Number.MAX_VALUE) + "px";
+			groupList[i].style.top = groupList[i].pieceStart.y + evt.pageY - groupList[i].dragStart.y + "px";
+			groupList[i].style.left = groupList[i].pieceStart.x + evt.pageX - groupList[i].dragStart.x + "px";
+		}
 	}
 }
 
@@ -166,7 +195,116 @@ function dropPiece(evt)
 {
 	if(selectedPiece != null)
 	{
-		selectedPiece.style.boxShadow = "none";
+		var groupList = selectedPiece.group.toList();
+		for(var i = 0; i < groupList.length; i++)
+		{
+			joinClosePieces(groupList[i], selectedPiece.group);
+			groupList[i].style.boxShadow = "none";
+		}
 		selectedPiece = null;
 	}
+}
+
+/*
+ * Get all of the neighbors of a puzzle piece
+ */
+function getNeighbors(puzzlePiece)
+{
+	var neighbors = {up: null, down: null, left: null, right: null};
+
+	if(puzzlePiece.puzzleRow != 0)
+		neighbors.up = puzzlePieces[puzzlePiece.puzzleRow-1][puzzlePiece.puzzleCol];
+	if(puzzlePiece.puzzleRow +1 < puzzlePieces.length)
+		neighbors.down = puzzlePieces[puzzlePiece.puzzleRow+1][puzzlePiece.puzzleCol];
+	if(puzzlePiece.puzzleCol != 0)
+		neighbors.left = puzzlePieces[puzzlePiece.puzzleRow][puzzlePiece.puzzleCol-1];
+	if(puzzlePiece.puzzleCol +1 < puzzlePieces.length)
+		neighbors.right = puzzlePieces[puzzlePiece.puzzleRow][puzzlePiece.puzzleCol+1];
+
+	return neighbors;
+}
+
+/*
+ * If neighboring pieces are placed close together, snap them together and add to group
+ */
+function joinClosePieces(puzzlePiece, currentGroup)
+{
+	var neighbors = getNeighbors(puzzlePiece);
+	var margin = 12;
+
+	var puzzleCanvas = document.getElementById("puzzleCanvas");
+
+	if(neighbors.up != null && !currentGroup.contains(neighbors.up))
+	{
+		var topDiff = (neighbors.up.offsetTop + neighbors.up.offsetHeight) - puzzlePiece.offsetTop;
+		var leftDiff = neighbors.up.offsetLeft - puzzlePiece.offsetLeft;
+		if(Math.abs(topDiff) <= margin && Math.abs(leftDiff) <= margin)
+		{
+			console.log("connect to up");
+			moveGroup(puzzlePiece, topDiff, leftDiff);
+			mergeGroups(puzzlePiece, neighbors.up);
+		}
+	}
+
+	if(neighbors.down != null && !currentGroup.contains(neighbors.down))
+	{
+		var topDiff = (neighbors.down.offsetTop - puzzlePiece.offsetHeight) - puzzlePiece.offsetTop;
+		var leftDiff = neighbors.down.offsetLeft - puzzlePiece.offsetLeft;
+		if(Math.abs(topDiff) <= margin && Math.abs(leftDiff) <= margin)
+		{
+			console.log("connect to down");
+			moveGroup(puzzlePiece, topDiff, leftDiff);
+			mergeGroups(puzzlePiece, neighbors.down);
+		}
+	}
+
+	if(neighbors.left != null && !currentGroup.contains(neighbors.left))
+	{
+		var topDiff = neighbors.left.offsetTop - puzzlePiece.offsetTop;
+		var leftDiff = (neighbors.left.offsetLeft + neighbors.left.offsetWidth) - puzzlePiece.offsetLeft;
+		if(Math.abs(topDiff) <= margin && Math.abs(leftDiff) <= margin)
+		{
+			console.log("connect to left");
+			moveGroup(puzzlePiece, topDiff, leftDiff);
+			mergeGroups(puzzlePiece, neighbors.left);
+		}
+	}
+
+	if(neighbors.right != null && !currentGroup.contains(neighbors.right))
+	{
+		var topDiff = neighbors.right.offsetTop - puzzlePiece.offsetTop;
+		var leftDiff = (neighbors.right.offsetLeft - puzzlePiece.offsetWidth) - puzzlePiece.offsetLeft;
+		if(Math.abs(topDiff) <= margin && Math.abs(leftDiff) <= margin)
+		{
+			console.log("connect to right");
+			moveGroup(puzzlePiece, topDiff, leftDiff);
+			mergeGroups(puzzlePiece, neighbors.right);
+		}
+	}
+
+	console.log(puzzlePiece.group.toList());
+}
+
+/*
+ * Move a group of pieces (tied to puzzlePiece) topDiff px down and leftDiff px right
+ */
+function moveGroup(puzzlePiece, topDiff, leftDiff)
+{
+	var groupList = puzzlePiece.group.toList();
+	for(var i = 0; i < groupList.length; i++)
+	{
+		groupList[i].style.top = groupList[i].offsetTop + topDiff + "px";
+		groupList[i].style.left = groupList[i].offsetLeft + leftDiff + "px";
+	}
+}
+
+/*
+ * Merge two pieces' groups together
+ */
+function mergeGroups(piece1, piece2)
+{
+	var newGroup = piece1.group.concat(piece2.group);
+	var newGroupList = newGroup.toList();
+	for(var i = 0; i < newGroupList.length; i++)
+		newGroupList[i].group = newGroup;
 }
