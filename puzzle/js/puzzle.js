@@ -176,14 +176,12 @@ function dragPiece(evt)
 {
 	if(selectedPiece != null)
 	{
-//		var puzzleCanvas = document.getElementById("puzzleCanvas");
 		evt.preventDefault();
 		var groupList = selectedPiece.group.toList();
 		for(var i = 0; i < groupList.length; i++)
 		{
 			groupList[i].style.boxShadow = "0px 0px 20px 1px";
 			groupList[i].style.zIndex = 10;
-//			groupList[i].style.top = slider.getBoundedValue(groupList[i].pieceStart.y + evt.pageY - groupList[i].dragStart.y,  puzzleCanvas.offsetTop, Number.MAX_VALUE) + "px";
 			groupList[i].style.top = groupList[i].pieceStart.y + evt.pageY - groupList[i].dragStart.y + "px";
 			groupList[i].style.left = groupList[i].pieceStart.x + evt.pageX - groupList[i].dragStart.x + "px";
 		}
@@ -243,7 +241,6 @@ function joinClosePieces(puzzlePiece, currentGroup)
 		var leftDiff = neighbors.up.offsetLeft - puzzlePiece.offsetLeft;
 		if(Math.abs(topDiff) <= margin && Math.abs(leftDiff) <= margin)
 		{
-			console.log("connect to up");
 			moveGroup(puzzlePiece, topDiff, leftDiff);
 			mergeGroups(puzzlePiece, neighbors.up);
 		}
@@ -255,7 +252,6 @@ function joinClosePieces(puzzlePiece, currentGroup)
 		var leftDiff = neighbors.down.offsetLeft - puzzlePiece.offsetLeft;
 		if(Math.abs(topDiff) <= margin && Math.abs(leftDiff) <= margin)
 		{
-			console.log("connect to down");
 			moveGroup(puzzlePiece, topDiff, leftDiff);
 			mergeGroups(puzzlePiece, neighbors.down);
 		}
@@ -267,7 +263,6 @@ function joinClosePieces(puzzlePiece, currentGroup)
 		var leftDiff = (neighbors.left.offsetLeft + neighbors.left.offsetWidth) - puzzlePiece.offsetLeft;
 		if(Math.abs(topDiff) <= margin && Math.abs(leftDiff) <= margin)
 		{
-			console.log("connect to left");
 			moveGroup(puzzlePiece, topDiff, leftDiff);
 			mergeGroups(puzzlePiece, neighbors.left);
 		}
@@ -279,13 +274,10 @@ function joinClosePieces(puzzlePiece, currentGroup)
 		var leftDiff = (neighbors.right.offsetLeft - puzzlePiece.offsetWidth) - puzzlePiece.offsetLeft;
 		if(Math.abs(topDiff) <= margin && Math.abs(leftDiff) <= margin)
 		{
-			console.log("connect to right");
 			moveGroup(puzzlePiece, topDiff, leftDiff);
 			mergeGroups(puzzlePiece, neighbors.right);
 		}
 	}
-
-	console.log(puzzlePiece.group.toList());
 }
 
 /*
