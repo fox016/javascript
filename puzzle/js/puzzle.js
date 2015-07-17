@@ -47,7 +47,7 @@ function setSliderValue(value)
 	overlay.style.height = imageObj.offsetHeight + "px";
 	overlay.style.left = imageObj.offsetLeft + "px";
 	overlay.style.top = imageObj.offsetTop + "px";
-	overlay.style.zindex = 5;
+	overlay.style.zIndex = 5;
 	overlay.style.border = "2px groove white";
 	overlay.style.borderCollapse = "collapse";
 
@@ -127,6 +127,7 @@ function buildPuzzle()
 			piece.style.backgroundPositionX = -1 * col * pieceSize + "px";
 			piece.style.backgroundPositionY = -1 * row * pieceSize + "px";
 			piece.style.position = "absolute";
+			piece.style.zIndex = 6;
 			piece.style.top = Math.floor(Math.random() * imageObj.offsetHeight * 1.5 + puzzleCanvas.offsetTop) + "px";
 			piece.style.left = Math.floor(Math.random() * (0.8*window.innerWidth) + (0.1*window.innerWidth)) + "px";
 			piece.puzzleRow = row;
@@ -181,6 +182,7 @@ function dragPiece(evt)
 		for(var i = 0; i < groupList.length; i++)
 		{
 			groupList[i].style.boxShadow = "0px 0px 20px 1px";
+			groupList[i].style.zIndex = 10;
 //			groupList[i].style.top = slider.getBoundedValue(groupList[i].pieceStart.y + evt.pageY - groupList[i].dragStart.y,  puzzleCanvas.offsetTop, Number.MAX_VALUE) + "px";
 			groupList[i].style.top = groupList[i].pieceStart.y + evt.pageY - groupList[i].dragStart.y + "px";
 			groupList[i].style.left = groupList[i].pieceStart.x + evt.pageX - groupList[i].dragStart.x + "px";
@@ -200,6 +202,7 @@ function dropPiece(evt)
 		{
 			joinClosePieces(groupList[i], selectedPiece.group);
 			groupList[i].style.boxShadow = "none";
+			groupList[i].style.zIndex = 6;
 		}
 		selectedPiece = null;
 	}
