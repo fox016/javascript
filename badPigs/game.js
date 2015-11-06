@@ -388,7 +388,7 @@ function buildStars(stars)
 			hasWeapon = true;
 			foxEngine.addCollisionEvent("enemy", "bullet", function(enemy, bullet) {
 				enemyHitByBullet(enemy, bullet);
-			});;
+			});
 			star.pushY(-100000);
 			setTimeout(function(){star.remove()}, 500);
 		}

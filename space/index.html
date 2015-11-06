@@ -1,0 +1,47 @@
+<html>
+	<head>
+		<script type='text/javascript' src='../foxEngine.js'></script>
+		<script type='text/javascript' src='game.js'></script>
+		<script type='text/javascript' src='levels.js'></script>
+
+		<style>
+			#target {
+				margin:auto;
+				background:lightgrey;
+			}
+			div#instructions {
+				width:600px;
+				margin:auto;
+				margin-top:30px;
+				background:cornsilk;
+				padding:10px;
+				font-weight:lighter;
+				font-family:sans-serif;
+			}
+			div#instructions li {
+				padding:5px 0px;
+			}
+			div #hideInstructions {
+				float:right;
+				cursor:pointer;
+				padding:5px;
+				background:lightgrey;
+			}
+			img#starImg {
+				width:15px;
+				height:15px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id='target'></div>
+		<div id='instructions'>
+			<div id='hideInstructions' onclick='document.getElementById("instructions").style.display = "none";'>X</div>
+			<ul>
+				<li>Use &#x2190; and &#x2192; to move left/right</li>
+				<li>Use SPACE to fire your weapon</li>
+				<li>Use ENTER as a shortcut to continue after you win or lose a level</li>
+			</ul>
+		</div>
+	</body>
+</html>
