@@ -171,3 +171,14 @@ jsonLevels.push({
 		]
 	}
 });
+
+jsonLevels.push({
+	"enemies": {
+		"vel_max_x": 500,
+		"weapon_timer": 200,
+		"positions": [
+			{"x": 375, "y": 0, "dir": 1},
+			{"x": 375, "y": 0, "dir": -1},
+		]
+	}
+});
