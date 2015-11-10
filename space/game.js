@@ -8,6 +8,7 @@ var weapons = {
 	"rapid": {timer: 100, forward: true, left: false, right: false},
 	"combo": {timer: 100, forward: true, left: true, right: true},
 }
+var currentWeapon = "default";
 
 /*
  * @ desc Load level 1 once window is ready for it
@@ -35,7 +36,7 @@ function loadEngine(levelObj)
 	foxEngine.open("target", 800, 500);
 	var background = new foxEngine.Image("images/space_background.jpg", 800, 500);
 	var player = buildPlayer();
-	player.weapon = weapons['default'];
+	player.weapon = weapons[currentWeapon];
 	setKeyEvents(player);
 	buildEnemies(levelObj.enemies);
 }
@@ -60,6 +61,7 @@ function buildPlayer()
 	player.setType("player");
 	player.applyGravity(false);
 	player.setZIndex(1000);
+	foxEngine.addCollisionEvent("player", "item", function(player, item) { playerGetsItem(player, item); });
 	return player;
 }
 
@@ -115,6 +117,7 @@ function playerLose(player)
 {
 	player.remove();
 	player.weapon = null;
+	currentWeapon = "default";
 	buildEndMessage("images/you_lose.jpg", "Try Again", function(){ reset(currentLevel); });
 }
 
@@ -167,10 +170,29 @@ function buildBullet(startPos, dir, speed, type, image, size)
 }
 
 /*
+ * @desc Build item
+ */
+function buildItem(itemType, startPos)
+{
+	var item = new foxEngine.Image("images/star.png", 20, 20, startPos.x, startPos.y);
+	item.setType("item");
+	item.itemType = itemType;
+	item.applyGravity(false);
+	item.friction = 0.0;
+	item.vel_max_down = 300;
+	item.pushY(10000000);
+	item.setZIndex(1200);
+	item.onHitHorizontalBorder = function() { item.remove(); };
+	return item;
+}
+
+/*
  * @desc Enemy react to bullet hit
  */
 function enemyHitByBullet(enemy, bullet)
 {
+	if(typeof enemy.item !== "undefined")
+		buildItem(enemy.item, enemy.getCenter());
 	removeEnemy(enemy);
 	bullet.remove();
 }
@@ -182,6 +204,18 @@ function playerHitByBullet(player, bullet)
 {
 	playerLose(player);
 	bullet.remove();
+}
+
+/*
+ * @desc Player hit by item
+ */
+function playerGetsItem(player, item)
+{
+	currentWeapon = item.itemType;
+	player.weapon = weapons[currentWeapon];
+	item.stopY();
+	item.setSize(40,40);
+	setTimeout(function() { item.remove() }, 1000);
 }
 
 /*
@@ -215,6 +249,7 @@ function buildEnemies(enemies)
 		enemy.setZIndex(800);
 		enemy.onHitVerticalBorder = function() { this.reverseX(); };
 		enemy.weapon = (typeof enemies.weapon_type === "undefined") ? weapons['default'] : weapons[enemies.weapon_type];
+		enemy.item = enemies.positions[i].item;
 	}
 
 	clearInterval(enemyFireInterval);
