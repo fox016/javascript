@@ -139,8 +139,11 @@ function _foxEngine()
 		}
 
 		// Free memory
-		frame.removeChild(component.node);
-		delete component;
+		if(component.node.parentNode !== null)
+		{
+			frame.removeChild(component.node);
+			delete component;
+		}
 	}
 
 	/*

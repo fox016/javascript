@@ -1,7 +1,13 @@
 /** @global */
 var currentLevel = null;
 var enemyFireInterval = null;
-var hasWeapon = true;
+
+var weapons = {
+	"default": {timer: 300, forward: true, left: false, right: false},
+	"split": {timer: 300, forward: true, left: true, right: true},
+	"rapid": {timer: 100, forward: true, left: false, right: false},
+	"combo": {timer: 100, forward: true, left: true, right: true},
+}
 
 /*
  * @ desc Load level 1 once window is ready for it
@@ -29,7 +35,7 @@ function loadEngine(levelObj)
 	foxEngine.open("target", 800, 500);
 	var background = new foxEngine.Image("images/space_background.jpg", 800, 500);
 	var player = buildPlayer();
-	hasWeapon = true;
+	player.weapon = weapons['default'];
 	setKeyEvents(player);
 	buildEnemies(levelObj.enemies);
 }
@@ -91,14 +97,13 @@ function setKeyEvents(targetObj)
 		targetObj.pushX(moveForce);
 	});
 
-	// Fire gun
-	var weaponTimer = 300;
+	// Fire weapon
 	var weaponFlag = true;
 	foxEngine.addKeyEvent(SPACE_KEY, function() {
-		if(weaponFlag && hasWeapon) {
+		if(weaponFlag && targetObj.weapon) {
 			fireWeapon(targetObj);
 			weaponFlag = false;
-			setTimeout(function() { weaponFlag = true; }, weaponTimer);
+			setTimeout(function() { weaponFlag = true; }, targetObj.weapon.timer);
 		}
 	});
 }
@@ -109,7 +114,7 @@ function setKeyEvents(targetObj)
 function playerLose(player)
 {
 	player.remove();
-	hasWeapon = false;
+	player.weapon = null;
 	buildEndMessage("images/you_lose.jpg", "Try Again", function(){ reset(currentLevel); });
 }
 
@@ -119,10 +124,12 @@ function playerLose(player)
 function fireWeapon(component)
 {
 	var startPos = component.getCenter();
-	var bulletSize = 10;
-	var image = "images/bullet.png";
+	var speed = 600;
+	var size = 10;
+
 	var dir = -1;
 	var type = "bullet";
+	var image = "images/bullet.png";
 
 	if(component.type == "enemy")
 	{
@@ -131,14 +138,32 @@ function fireWeapon(component)
 		type = "enemy_bullet";
 	}
 
-	var bullet = new foxEngine.Image(image, bulletSize, bulletSize, startPos.x - (0.5*bulletSize), startPos.y);
+	if(component.weapon.forward)
+		buildBullet(startPos, {y:dir, x:0}, speed, type, image, size);
+	if(component.weapon.left)
+		buildBullet(startPos, {y:dir, x:dir}, speed, type, image, size);
+	if(component.weapon.right)
+		buildBullet(startPos, {y:dir, x:-1*dir}, speed, type, image, size);
+}
+
+/*
+ * Build a bullet
+ */
+function buildBullet(startPos, dir, speed, type, image, size)
+{
+	var bullet = new foxEngine.Image(image, size, size, startPos.x - (0.5*size), startPos.y);
 	bullet.setType(type);
 	bullet.friction = 0.0;
-	bullet.vel_max_up = 600;
-	bullet.vel_max_down = 600;
-	bullet.pushY(dir * 1000000);
+	bullet.vel_max_up = speed;
+	bullet.vel_max_down = speed;
+	bullet.vel_max_left = speed;
+	bullet.vel_max_right = speed;
+	bullet.pushY(dir.y * 1000000);
+	bullet.pushX(dir.x * 1000000);
 	bullet.setZIndex(1100);
 	bullet.onHitHorizontalBorder = function() { bullet.remove(); };
+	bullet.onHitVerticalBorder = function() { bullet.remove(); };
+	return bullet;
 }
 
 /*
@@ -189,10 +214,10 @@ function buildEnemies(enemies)
 		enemy.applyGravity(false);
 		enemy.setZIndex(800);
 		enemy.onHitVerticalBorder = function() { this.reverseX(); };
+		enemy.weapon = (typeof enemies.weapon_type === "undefined") ? weapons['default'] : weapons[enemies.weapon_type];
 	}
 
-	if(enemyFireInterval !== null)
-		clearInterval(enemyFireInterval);
+	clearInterval(enemyFireInterval);
 	enemyFireInterval = setInterval(enemiesFire, enemies.weapon_timer);
 
 	foxEngine.addCollisionEvent("enemy", "bullet", function(enemy, bullet) { enemyHitByBullet(enemy, bullet); });
