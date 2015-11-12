@@ -211,7 +211,17 @@ function playerHitByBullet(player, bullet)
  */
 function playerGetsItem(player, item)
 {
-	currentWeapon = item.itemType;
+	console.log(currentWeapon);
+	console.log(item.itemType);
+	if(currentWeapon == "split" && item.itemType == "rapid")
+		currentWeapon = "combo";
+	else if(currentWeapon == "rapid" && item.itemType == "split")
+		currentWeapon = "combo";
+	else if(currentWeapon == "combo")
+		currentWeapon = "combo";
+	else
+		currentWeapon = item.itemType;
+	console.log(currentWeapon);
 	player.weapon = weapons[currentWeapon];
 	item.stopY();
 	item.setSize(40,40);
