@@ -1,10 +1,8 @@
 d = 1
-y = 150
-for x in xrange(0, 400, 25):
+y = 100
+for x in xrange(0, 800, 50):
 	print "{\"x\": "+str(x)+", \"y\": "+str(y)+", \"dir\": "+str(d)+"},"
-	y -= 10
 d = -1
-y = 0
-for x in xrange(425, 800, 25):
+y = 100
+for x in xrange(0, 800, 50):
 	print "{\"x\": "+str(x)+", \"y\": "+str(y)+", \"dir\": "+str(d)+"},"
-	y += 10
