@@ -91,7 +91,6 @@ console.log(lastName);
 var fullName = addTwoStrings(firstName, lastName);
 console.log(fullName);
 
-
 // Guess what the output will look like
 var x = 10;
 var n = 5;
@@ -105,3 +104,22 @@ console.log("n = " + n);
 x = add10(n);
 console.log("x = " + x);
 console.log("n = " + n);
+
+// Cannot access vars created inside of a function
+function makeVar()
+{
+  var thisVar = 7.5; // Local, only exists inside of function
+}
+makeVar();
+//console.log(thisVar);
+
+var thatVar = 10;
+function changeVar()
+{
+  thatVar += 15; // This will update the global variable
+}
+console.log(thatVar);
+changeVar();
+console.log(thatVar);
+changeVar();
+console.log(thatVar);
