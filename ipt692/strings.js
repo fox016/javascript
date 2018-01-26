@@ -1,3 +1,6 @@
+/*
+ * Strings
+ */
 var firstName = "John"; // Use "
 var middleName = 'Danger'; // Use '
 var lastName= "Smith";
@@ -62,3 +65,8 @@ console.log(lyric.indexOf("reaper"));
 console.log(lyric.indexOf("r"));
 console.log(lyric.lastIndexOf("r"));
 console.log(lyric.indexOf("z"));
+
+var name = "J R R Tolkien";
+var spacePosition = name.lastIndexOf(" ");
+var lastName = name.substring(spacePosition+1, spacePosition.length);
+console.log(lastName);

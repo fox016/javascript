@@ -1,20 +1,22 @@
+/*
 var m = 7;
 var x = 8;
 var b = 2;
-y = m * x + b; // Linear solution for given (m, b)
+var y = m * x + b; // Linear solution for given (m, b)
 
 console.log("m = " + m);
 console.log("x = " + x);
 console.log("b = " + b);
 console.log("y = " + y);
+console.log("type of m: " + typeof(m));
 console.log("type of y: " + typeof(y));
 
 var inf = Number.POSITIVE_INFINITY;
 var ninf = Number.NEGATIVE_INFINITY;
 var x = 10;
-console.log(inf + " is infinite? " + Number.isFinite(inf));
-console.log(x + " is infinite? " + Number.isFinite(x));
-console.log(ninf + " is infinite? " + Number.isFinite(ninf));
+console.log(inf + " is finite? " + Number.isFinite(inf));
+console.log(x + " is finite? " + Number.isFinite(x));
+console.log(ninf + " is finite? " + Number.isFinite(ninf));
 
 // isInteger
 var int = 5;
@@ -52,6 +54,10 @@ x *= 5;
 console.log("x = " + x);
 x /= 2;
 console.log("x = " + x);
+x += 1;
+console.log("x = " + x);
+x++;
+console.log("x = " + x);
 
 // Math formulae
 var radius = 3.5;
@@ -62,3 +68,8 @@ var a = 3;
 var b = 4;
 var c = Math.sqrt(Math.pow(a,2) + Math.pow(b,2));
 console.log("a = " + a + ", b = " + b + ", c = " + c);
+
+var x = 3;
+var y = 5;
+console.log("x + y = " + x + y);
+*/
