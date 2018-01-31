@@ -36,7 +36,7 @@ showFullName("Jim", "Jenson");
 showFullName("Becca", "Bradford");
 showFullName("Sam", "Sorenson");
 
-// Return output
+// Return a value
 function getFullName(firstName, lastName)
 {
   var fullName = firstName + " " + lastName;
