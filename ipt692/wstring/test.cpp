@@ -2,14 +2,22 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <sstream>
 #include "dirent.h"
 using namespace std;
 
 void processLine(wchar_t* line, map<wstring, int> &words)
 {
-	// TODO
 	wstring wline(line);
-	words[wline] = 1;
+	wstring word;
+	wstringstream wss(wline); // https://stackoverflow.com/a/36812422/1060631
+	while(getline(wss, word, L' ')) // Separate by space character
+	{
+		if(words.find(word) == words.end()) // If not found, init to 1
+			words[word] = 1;
+		else // If found, increment value
+			words[word]++;
+	}
 }
 
 bool readfile(char* filename, string path, map<wstring, int> &words)
@@ -22,6 +30,7 @@ bool readfile(char* filename, string path, map<wstring, int> &words)
 	fn = path + "/" + fn;
 
 	// Setup input
+	locale::global(locale("")); // https://stackoverflow.com/a/3950795/1060631 (might be different for Windows)
 	int lineSize = 1000;
 	wchar_t line[lineSize]; // char array to hold lines as they are read from file
 	wifstream in;
@@ -73,7 +82,8 @@ int readfiles()
 	for(map<wstring,int>::iterator it = words.begin(); it != words.end(); it++)
 	{
 		wstring word = it->first;
-		out << word << endl;
+		int count = it->second;
+		out << word << L": " << count << endl;
 	}
 	out.close();
 
