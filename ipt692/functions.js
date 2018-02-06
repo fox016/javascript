@@ -1,7 +1,8 @@
 // Process
 function doTheThing()
 {
-  console.log("I did the thing just like you said");
+  //console.log("I did the thing just like you said");
+  //console.log("and my name is Bob");
 }
 
 doTheThing();
@@ -13,7 +14,7 @@ doTheThing();
 // One input
 function showName(firstName)
 {
-    console.log("Hello, my name is " + firstName);
+    //console.log("Hello, my name is " + firstName);
 }
 
 showName("Sally");
@@ -26,7 +27,7 @@ showName("Sam");
 // Two (or more) inputs
 function showFullName(firstName, lastName)
 {
-    console.log("Hello, my name is " + firstName + " " + lastName);
+    //console.log("Hello, my name is " + firstName + " " + lastName);
 }
 
 showFullName("Sally", "Smith");
@@ -40,23 +41,25 @@ showFullName("Sam", "Sorenson");
 function getFullName(firstName, lastName)
 {
   var fullName = firstName + " " + lastName;
+  var sortName = lastName + ", " + firstName;
   return fullName;
 }
 
 var name1 = getFullName("Sally", "Smith");
 var name2 = getFullName("Bob", "Barker");
-console.log("Our names are " + name1 + " and " + name2);
+//console.log("Our names are " + name1 + " and " + name2);
+//console.log(getFullName("Mr", "Rogers"));
 
 // Scope
 // Note that x is changed within the function, but the number passed in as x doesn't change
-function add1(x)
+function add1(x) // Local scope
 {
   x++;
 }
-var x = 10;
-console.log("x = " + x);
+var x = 10; // Global scope
+//console.log("x = " + x);
 add1(x);
-console.log("x = " + x);
+//console.log("x = " + x);
 
 // Note that x is changed within the function, but the number passed in as x doesn't change
 function addOne(x)
@@ -65,16 +68,17 @@ function addOne(x)
   return x;
 }
 var x = 10;
-console.log("x = " + x);
-addOne(x);
-console.log("x = " + x);
+//console.log("x = " + x);
+addOne(x); // I'm not doing anything with the return value
+//console.log("x = " + x);
 x = addOne(x);
-console.log("x = " + x);
+//console.log("x = " + x);
 
 var n = 10;
-console.log("n = " + n);
+var y = addOne(18);
+//console.log("n = " + n);
 n = addOne(n);
-console.log("n = " + n);
+//console.log("n = " + n);
 
 // Note that string1 is changed within the function, but the string passed in as string1 doesn't change
 function addTwoStrings(string1, string2)
@@ -85,11 +89,13 @@ function addTwoStrings(string1, string2)
 
 var firstName = "John";
 var lastName = "Smith";
-addTwoStrings(firstName, lastName);
-console.log(firstName);
-console.log(lastName);
+addTwoStrings(firstName, lastName); // I'm not using the return value
+//console.log(firstName);
+//console.log(lastName);
 var fullName = addTwoStrings(firstName, lastName);
-console.log(fullName);
+//console.log(fullName);
+var fullName2 = addTwoStrings(fullName, lastName);
+//console.log(fullName2);
 
 // Guess what the output will look like
 var x = 10;
@@ -99,11 +105,11 @@ function add10(x)
     x += 10;
     return x;
 }
-console.log("x = " + x);
-console.log("n = " + n);
+//console.log("x = " + x);
+//console.log("n = " + n);
 x = add10(n);
-console.log("x = " + x);
-console.log("n = " + n);
+//console.log("x = " + x);
+//console.log("n = " + n);
 
 // Cannot access vars created inside of a function
 function makeVar()

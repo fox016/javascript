@@ -20,8 +20,8 @@ function funcSetup()
   //var output = fahrToCel(parseFloat(input1));
   //var output = celToFahr(parseFloat(input1));
   //var output = addString(input1, input2);
-  //var output = findInString(input1, input2);
-  var output = getSubstring(input1, input2, input3);
+  var output = findInString(input1, input2);
+  //var output = getSubstring(input1, input2, input3);
   $("#output1").val(output);
 }
 

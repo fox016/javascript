@@ -13,6 +13,7 @@ void processLine(wchar_t* line, map<wstring, int> &words)
 	wstringstream wss(wline); // https://stackoverflow.com/a/36812422/1060631
 	while(getline(wss, word, L' ')) // Separate by space character
 	{
+		// TODO find replace punctuation in word
 		if(words.find(word) == words.end()) // If not found, init to 1
 			words[word] = 1;
 		else // If found, increment value

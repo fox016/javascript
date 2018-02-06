@@ -1,0 +1,34 @@
+<html>
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type='text/javascript' src='booleans.js'></script>
+  <link rel='stylesheet' type='text/css' href='l4.css' />
+</head>
+<body>
+  <p>
+    Look at the console (Chrome dev tools).
+  </p>
+  <div>
+    <p>
+      Pick a function:
+    </p>
+    <label><input type='radio' name='functionPicker' value='fahrToCel' />Fahrenheit to Celsius</label><br/>
+    <label><input type='radio' name='functionPicker' value='celToFahr' />Celsius to Fahrenheit</label><br/>
+    <label><input type='radio' name='functionPicker' value='addString' />Concatenate Strings</label><br/>
+    <label><input type='radio' name='functionPicker' value='findInString' />Find in String</label><br/>
+    <label><input type='radio' name='functionPicker' value='getSubstring' />Get Substring</label><br/>
+  </div>
+  <div>
+    <label>Input 1: <input type='text' id='input1' name='input1' /></label>
+    <label>Input 2: <input type='text' id='input2' name='input2' /></label>
+    <label>Input 3: <input type='text' id='input3' name='input3' /></label>
+  </div>
+  <div>
+    <button id='goBtn'>Go!</button>
+    <button id='clearBtn'>Clear</button>
+  </div>
+  <div>
+    <label>Output 1: <input type='text' id='output1' name='output1' size=50 readonly/></label>
+  </div>
+</body>
+</html>
