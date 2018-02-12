@@ -2,7 +2,7 @@ div {
   font-size:1.5em;
   margin:20px;
 }
-input {
+input, select {
   font-size:1em;
   margin-right:20px;
   padding:3px;
