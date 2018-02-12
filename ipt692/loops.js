@@ -1,6 +1,14 @@
 // After page loads, execute this to initialize
 $(document).ready(function()
 {
+  // Append list of numbers to HTML body
+  var num = 1;
+  while(num <= 100)
+  {
+    $("body").append("<div class='number'>#" + num + "</div>");
+    num++;
+  }
+
   // Build dropdowns
   buildMonthDropdown();
   buildDayDropdown();
@@ -14,19 +22,37 @@ $(document).ready(function()
 // Append options 1-12 to #month dropdown
 function buildMonthDropdown()
 {
+  var month = 1;
+  while(month <= 12)
+  {
+    $("#month").append("<option>" + month + "</option>");
+    month+=1; // month++ or month=month+1
+  }
+
+  /*
   for(var month=1; month <=12; month++)
   {
     $("#month").append("<option>" + month + "</option>");
   }
+  */
 }
 
 // Append options 1-31 to #day dropdown
 function buildDayDropdown()
 {
+  var day = 1;
+  while(day <= 31)
+  {
+    $("#day").append("<option>" + day + "</option>");
+    day+=1; // day++ or day=day+1
+  }
+
+  /*
   for(var day=1; day <=31; day++)
   {
     $("#day").append("<option>" + day + "</option>");
   }
+  */
 }
 
 // Append options to #year dropdown
