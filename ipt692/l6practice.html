@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <style>
+  .letter {
+    width:8.5in;
+    height:11in;
+    border:2px solid black;
+    margin:10px 0;
+    padding:5px;
+    font-size:3em;
+  }
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script>
+  // Run this after the page loads
+  $(document).ready(function() {
+    var names = ["Bob","Jim","Jeff","Sally","Alice","Hubert","Scotland","Kalia","Naomi","Ariel"];
+    var gpas = [2.58, 3.29, 3.98, 1.89, 2.65, 4.00, 3.69, 3.98, 3.59, 4.00];
+    for(var i=0; i < names.length; i++)
+    {
+      $("#gpaTable tbody").append("<tr><td>"+names[i]+"</td><td>"+gpas[i]+"</td></tr>");
+      $("#letters").append("<div class='letter'>Hello "+names[i]+", You have a GPA of "+ gpas[i]+".</div>");
+    }
+  })
+  </script>
+</head>
+<body>
+  <table id='gpaTable'>
+    <thead> <tr> <th>Name</th> <th>GPA</th></tr> </thead>
+    <tbody> </tbody>
+  </table>
+  <div id='letters'>
+  </div>
+</body>
+</html>
