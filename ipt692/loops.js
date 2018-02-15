@@ -5,7 +5,7 @@ $(document).ready(function()
   var num = 1;
   while(num <= 100)
   {
-    $("body").append("<div class='number'>#" + num + "</div>");
+    $("#counting").append("<div class='number'>#" + num + "</div>");
     num++;
   }
 
