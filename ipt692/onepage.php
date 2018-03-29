@@ -27,9 +27,9 @@ function getVerse($number) // Functions same as JavaScript
 {
   $nextNum = $number-1;
   if($number == 1) // If-else-if blocks are same as JavaScript
-    return "<div class='verse'>$number bottle of milk on the wall, $number bottles of milk. Take one down, pass it around, $nextNum bottles of milk on the wall.</div>";
+    return "<div class='verse'>$number bottle of milk on the wall, $number bottle of milk. Take one down, pass it around, $nextNum bottles of milk on the wall.</div>";
   else if($nextNum == 1)
-    return "<div class='verse'>$number bottles of milk on the wall, $number bottle of milk. Take one down, pass it around, $nextNum bottle of milk on the wall.</div>";
+    return "<div class='verse'>$number bottles of milk on the wall, $number bottles of milk. Take one down, pass it around, $nextNum bottle of milk on the wall.</div>";
   else
     return "<div class='verse'>$number bottles of milk on the wall, $number bottles of milk. Take one down, pass it around, $nextNum bottles of milk on the wall.</div>";
 }
