@@ -5,6 +5,41 @@
 		<script type='text/javascript' src='levels.js'></script>
 
 		<style>
+      body {
+        padding:0;
+        margin:0;
+      }
+      #nav {
+        width:100%;
+        background-color:#e6e6e6;
+        margin-bottom:20px;
+        padding:10px 20px;
+        text-align:center;
+      }
+      .navBtn {
+        font-size:0.9em;
+        background:#fff;
+        border:1px solid #002e5d;
+        color:#002e5d;
+        width:200px;
+        height:30px;
+        margin:0 20px;
+        font-weight:300;
+        letter-spacing:1.5px;
+        cursor:pointer;
+        box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149);
+        text-align:center;
+        padding:5px 15px;
+        text-transform:uppercase;
+        border-radius:12px;
+      }
+      .navBtn.selected {
+        background:#002e5d;
+        color:#fff;
+      }
+      .navBtn:hover {
+        box-shadow: 0 1px 3px 0 rgba(60,64,67,0.302), 0 4px 8px 3px rgba(60,64,67,0.149);
+      }
 			#target {
 				margin:auto;
 				background:#555;
@@ -13,7 +48,7 @@
 				width:600px;
 				margin:auto;
 				margin-top:30px;
-				background:cornsilk;
+				background:#e6e6e6;
 				padding:10px;
 				font-weight:lighter;
 				font-family:sans-serif;
@@ -25,7 +60,7 @@
 				float:right;
 				cursor:pointer;
 				padding:5px;
-				background:lightgrey;
+				background:#c5c5c5;
 			}
 			img#starImg {
 				width:15px;
@@ -34,6 +69,12 @@
 		</style>
 	</head>
 	<body>
+    <div id='nav'>
+      <button class='navBtn' onclick='location.href="/noauth/dev/javascript/space"'>Space Invaders</button>
+      <button class='navBtn' onclick='location.href="/noauth/dev/javascript/badPigs"'>Bad Pigs</button>
+      <button class='navBtn selected' onclick='location.href="/noauth/dev/javascript/blockBlast"'>Block Blast</button>
+      <button class='navBtn' onclick='location.href="/noauth/dev/javascript/puzzle"'>Puzzle</button>
+    </div>
 		<div id='target'></div>
 		<div id='instructions'>
 			<div id='hideInstructions' onclick='document.getElementById("instructions").style.display = "none";'>X</div>
