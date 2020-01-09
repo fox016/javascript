@@ -1,0 +1,88 @@
+* {
+  font-family:"Roboto", Helvetica, sans-serif;
+}
+.key-val-table tbody th {
+  padding-right:5px;
+  font-weight:300;
+  text-align:left;
+}
+.key-val-table tbody td {
+  padding-right:20px;
+}
+.section select {
+  font-size:0.9em;
+  height:30px;
+  width:200px;
+  font-weight:500;
+  background-color:white;
+}
+.section input {
+  font-size:0.9em;
+  height:30px;
+  width:200px;
+  font-weight:500;
+  text-indent:3px;
+  box-sizing:border-box; 
+  background-color:white;
+}
+.note {
+  border:1px solid black;
+  position:absolute;
+  top:200px;
+}
+.note.white {
+  background-color:#fff;
+  z-index:1;
+}
+.note.black {
+  background-color:#000;
+  z-index:2;
+}
+.note.highlight {
+  background-color:#B3F2FF;
+}
+#songBtnDiv {
+  margin-top:10px;
+  display:flex;
+}
+.songBtn {
+  padding:1px 0px;
+  border-radius:7px;
+  border:none;
+  font-size:1em;
+  font-weight:normal;
+  text-decoration:none;
+  letter-spacing:1px;
+  color:white;
+  cursor:pointer;
+  box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149);
+  background-color:#002e5d;
+  padding:1px 10px;
+  margin:0 5px 5px 0;
+}
+.customWave {
+  display:none;
+}
+#graphDialog {
+  display:none;
+}
+#myCanvas {
+  z-index:11;
+}
+.ui-dialog {
+  padding:0 !important;
+}
+.ui-dialog .ui-dialog-content {
+	box-shadow:0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  padding:0 !important;
+  width:100% !important;
+}
+.ui-dialog-titlebar {
+  border-bottom-right-radius:0 !important;
+  border-bottom-left-radius:0 !important;
+  background-color:#002e5d !important;
+  background:#002e5d !important;
+  color:white !important;
+  border:none !important;
+
+}
