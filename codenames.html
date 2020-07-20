@@ -1,0 +1,173 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style type='text/css'>
+  #refreshBtn
+  {
+    height:30px;
+    width:150px;
+    margin-top:30px;
+    margin-bottom:30px;
+    border-radius:0.2666666667em;
+    border-color:rgb(216, 216, 216) rgb(209, 209, 209) rgb(186, 186, 186);
+    border-width:1px;
+    border-image:none;
+    background:transparent;
+    background-color:#D6D6D6;
+    background-image:linear-gradient(0deg, #D6D6D6, #F1F1F1);
+  }
+  .row
+  {
+    display:flex;
+    flex-direction:row;
+    flex-wrap:nowrap;
+    justify-content:flex-start;
+    align-items:flex-start;
+  }
+  .square
+  {
+    margin:0;
+    border-width:1px;
+    border-style:solid;
+    border-color:#000;
+    height:60px;
+    width:60px;
+  }
+  .red
+  {
+    background-color:rgb(175,30,45);
+  }
+  .blue
+  {
+    background-color:rgb(30,70,140);
+  }
+  .square.black
+  {
+    background-color:#000;
+  }
+  .square.brown
+  {
+    background-color:rgb(250,230,210);
+  }
+  #firstLabel
+  {
+    display:flex;
+    flex-direction:row;
+    flex-wrap:nowrap;
+    justify-content:flex-start;
+    align-items:center;
+    margin-top:20px;
+    font-family:Arial,sans-serif;
+  }
+  #firstPlayer
+  {
+    margin:0;
+    margin-left:10px;
+    border-width:1px;
+    border-style:solid;
+    border-color:#000;
+    height:30px;
+    width:60px;
+  }
+  </style>
+  <script type='text/javascript'>
+
+  const width = 5;
+  const height = 5;
+
+  function generate()
+  {
+    let div = document.getElementById("resultDiv");
+    while(div.hasChildNodes())
+      div.removeChild(div.firstChild);
+    let colors = getSquareColors();
+    for(let r = 0; r < height; r++)
+    {
+      let row = document.createElement("row");
+      row.className = "row";
+      for(let c = 0; c < width; c++)
+      {
+        let square = document.createElement("div");
+        let pos = (width*r)+1+c;
+        square.className = "square";
+        square.setAttribute("pos", pos);
+        square.className += " " + colors[pos];
+        row.appendChild(square);
+      }
+      div.appendChild(row);
+    }
+  }
+
+  function getSquareColors()
+  {
+    let total = width*height;
+    let redCount = Math.floor(total/3);
+    let blueCount = redCount;
+    (Math.random() >= 0.5) ? redCount++ : blueCount++;
+    let blackCount = 1;
+    let brownCount = total-redCount-blueCount-blackCount;
+    let indexColorMap = {};
+    
+    let redCurr = 0;
+    while(redCurr < redCount)
+    {
+      let pos = getRand(1, total);
+      if(!(pos in indexColorMap))
+      {
+        indexColorMap[pos] = "red";
+        redCurr++;
+      }
+    }
+    
+    let blueCurr = 0;
+    while(blueCurr < blueCount)
+    {
+      let pos = getRand(1, total);
+      if(!(pos in indexColorMap))
+      {
+        indexColorMap[pos] = "blue";
+        blueCurr++;
+      }
+    }
+    
+    let blackCurr = 0;
+    while(blackCurr < blackCount)
+    {
+      let pos = getRand(1, total);
+      if(!(pos in indexColorMap))
+      {
+        indexColorMap[pos] = "black";
+        blackCurr++;
+      }
+    }
+
+    for(let i = 1; i <= total; i++)
+    {
+      if(!(i in indexColorMap))
+        indexColorMap[i] = "brown";
+    }
+
+    document.getElementById("firstPlayer").className = (redCount > blueCount) ? "red" : "blue";
+
+    return indexColorMap;
+  }
+
+  function getRand(min, max)
+  {
+    return Math.floor(Math.random() * (max-min+1)) + min;
+  }
+
+  window.onload = generate;
+
+  </script>
+</head>
+<body>
+  <div id='resultDiv'>
+  </div>
+  <div id='firstLabel'>
+    <span>First Player: </span><div id='firstPlayer'></div>
+  </div>
+  <button id='refreshBtn' type='button' onclick='generate()'>Refresh</button>
+</body>
+</html>
