@@ -1,0 +1,228 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"> 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@300;600;900&display=swap" rel="stylesheet">
+
+  <!-- BEGIN STYLE-->
+  <style type='text/css'>
+  body
+  {
+    background-image: radial-gradient(#7CAFCE 50%, #444);
+    background-repeat: no-repeat;
+    background-size: auto;
+  }
+  .page
+  {
+    text-align:center;
+  }
+  h1
+  {
+    font-size:48px;
+    font-family:"Grenze Gotisch",serif;
+    color: rgb(200,150,90);
+    text-shadow: 2px 3px 4px #282828;
+  }
+  #playerCountDiv
+  {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  }
+  #playerCount
+  {
+    font-size:144px;
+    font-family:"Grenze Gotisch",serif;
+    color: #F9E230;
+    text-shadow: 2px 3px 4px #282828;
+    margin-bottom:30px;
+  }
+  #playerCountDiv button
+  {
+    background:none;
+    border:none;
+    font-size:48px;
+    font-family:serif;
+    color: #e6e6e6;
+    text-shadow: 2px 3px 4px #282828;
+    font-weight:900;
+    cursor:pointer;
+  }
+  .nav
+  {
+    display:flex;
+    justify-content:space-between;
+    width:100%;
+    margin:0px auto;
+  }
+  .nav button
+  {
+    background:none;
+    border:none;
+    font-size:36px;
+    color: #e6e6e6;
+    font-family:"Grenze Gotisch",serif;
+    text-shadow: 2px 3px 4px #282828;
+    font-weight:900;
+    cursor:pointer;
+  }
+  input.playerName
+  {
+    display:block;
+    margin:0px auto;
+    height:60px;
+    width:calc(100% - 80px);
+    margin-bottom:20px;
+    border:none;
+    background:#ffffff80;
+    font-size:48px;
+    border-bottom:2px solid #666;
+    color:#f9e230;
+    font-family:"Grenze Gotisch",serif;
+    text-shadow: 2px 3px 4px #282828;
+  }
+  input.playerName.error
+  {
+    border:2px solid red;
+  }
+  </style>
+  <!-- END STYLE-->
+
+  <!-- BEGIN SCRIPT -->
+  <script type='text/javascript'>
+
+  var current_page = 0;
+  var players = [];
+
+  $(document).ready(function()
+  {
+    $(window).resize(resize);
+
+    setPage();
+
+    $("#addPlayer").click(function()
+    {
+      let count = parseInt($("#playerCount").text());
+      if(count < 6)
+        $("#playerCount").html(count+1);
+    });
+    $("#removePlayer").click(function()
+    {
+      let count = parseInt($("#playerCount").text());
+      if(count > 2)
+        $("#playerCount").html(count-1);
+    });
+    $(".playerBtn").bind('touchmove', function(e) {
+      e.preventDefault();
+      $(this).click();
+    });
+    $(".playerBtn").bind('touchend', function(e) {
+      e.preventDefault();
+      $(this).click();
+    });
+    $(".nextBtn").click(function() { setPage(current_page+1); });
+    $(".prevBtn").click(function() { setPage(current_page-1); });
+  });
+
+  function setPage(page)
+  {
+    // Pre-loading logic
+    if(typeof page !== "number")
+      page = current_page+1;
+    if(current_page == 2)
+    {
+      let valid = true;
+      let names = [];
+      $(".playerName").each(function()
+      {
+        let name = $.trim($(this).val());
+        if(name == "" || names.includes(name))
+        {
+          $(this).addClass("error");
+          valid = false;
+        }
+        else
+        {
+          $(this).removeClass("error");
+          names.push(name);
+        }
+      });
+      if(!valid && page > current_page)
+        return;
+    }
+
+    // Loading logic
+    if(page == 2)
+    {
+      let nameCount = $(".playerName").length;
+      let count = parseInt($("#playerCount").text());
+      let html = "";
+      if(nameCount < count)
+      {
+        for(i = nameCount; i < count; i++)
+        {
+          $("#playerNameDiv").append("<input class='playerName' type='text' />");
+        }
+      }
+      else if(nameCount > count)
+      {
+        for(i = 0; i < nameCount - count; i++)
+          $("#playerNameDiv .playerName:last-child").remove();
+      }
+    }
+
+    // Post-loading logic
+    $(".page").hide();
+    $("#page"+page).show();
+    current_page = page;
+    resize();
+  }
+
+  function resize()
+  {
+    let width = $(window).width() + "px";
+    //let height = $(window).height() + "px";
+    let height = Math.max(document.body.clientHeight+30, $(window).height()) + "px";
+    $('body').css('background-size', width + " " + height);
+  }
+
+  </script>
+  <!-- END SCRIPT -->
+
+</head>
+<body>
+
+<img id="comp-jmhzupeoimgimage" style="position:absolute; top:0; z-index:-1; opacity:0.2; width:200px;" alt="Skull King" data-type="image" itemprop="image" src="https://static.wixstatic.com/media/524f08_78aebdb85f7740ca95128df99881b813~mv2_d_1456_2076_s_2.png">
+
+<div class='page' id='page1'>
+  <h1>How many players?</h1>
+  <div id='playerCountDiv'>
+    <div id='playerCount'>2</div>
+    <div>
+      <button class='playerBtn' id='addPlayer'>&uarr;</button><br/>
+      <button class='playerBtn' id='removePlayer'>&darr;</button>
+    </div>
+  </div>
+  <div class='nav'>
+    <div></div>
+    <button class='nextBtn'>Next &rarr;</button>
+    <div></div>
+  </div>
+</div>
+
+<div class='page' id='page2'>
+  <h1>Enter player names:</h1>
+  <div id='playerNameDiv'>
+  </div>
+  <div class='nav'>
+    <button class='prevBtn'>&larr;</button>
+    <button class='nextBtn'>&rarr;</button>
+  </div>
+</div>
+
+<div class='page' id='page3'>
+</div>
+
+</body>
+</html>
