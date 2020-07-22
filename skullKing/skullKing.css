@@ -1,0 +1,148 @@
+body
+{
+  background-image: radial-gradient(#7CAFCE 50%, #444);
+  background-repeat: no-repeat;
+  background-size: auto;
+}
+.page
+{
+  text-align:center;
+}
+h1
+{
+  font-size:48px;
+  font-family:"Grenze Gotisch",serif;
+  color: #c8965a;
+  text-shadow: 2px 3px 4px #282828;
+}
+#playerCountDiv
+{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+#playerCount
+{
+  font-size:144px;
+  font-family:"Grenze Gotisch",serif;
+  color: #F9E230;
+  text-shadow: 2px 3px 4px #282828;
+  margin-bottom:30px;
+}
+#playerCountDiv button
+{
+  background:none;
+  border:none;
+  font-size:48px;
+  font-family:serif;
+  color: #e6e6e6;
+  text-shadow: 2px 3px 4px #282828;
+  font-weight:900;
+  cursor:pointer;
+}
+.nav
+{
+  display:flex;
+  justify-content:space-between;
+  width:100%;
+  margin:0px auto;
+}
+.nav button
+{
+  background:none;
+  border:none;
+  font-size:36px;
+  color: #e6e6e6;
+  font-family:"Grenze Gotisch",serif;
+  text-shadow: 2px 3px 4px #282828;
+  font-weight:900;
+  cursor:pointer;
+}
+input.playerName
+{
+  display:block;
+  margin:0px auto;
+  height:60px;
+  width:calc(100% - 80px);
+  margin-bottom:20px;
+  border:none;
+  background:#ffffff80;
+  font-size:48px;
+  border-bottom:2px solid #666;
+  color:#f9e230;
+  font-family:"Grenze Gotisch",serif;
+  text-shadow: 2px 3px 4px #282828;
+}
+input.playerName.error
+{
+  border:2px solid red;
+}
+.player
+{
+  padding:0 20px;
+  border:2px solid black;
+  border-radius:20px;
+  background:#ffffff80;
+  margin:20px;
+}
+.playerHeader
+{
+  display:flex;
+  justify-content:space-between;
+  font-size:48px;
+  font-family:"Grenze Gotisch",serif;
+  text-shadow: 2px 3px 4px #282828;
+  color:#f9e230;
+}
+.playerHistory
+{
+  display:none;
+}
+.historyItem
+{
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  background-color: #fff8;
+  padding: 10px;
+  border-radius: 10px;
+}
+.historyRound
+{
+  font-size:48px;
+  font-family:"Grenze Gotisch",serif;
+  text-shadow: 2px 3px 4px #282828;
+  color: #c8965a;
+  font-weight:900;
+  margin-right:15px;
+}
+.recordTable th
+{
+  text-align:left;
+  font-weight:normal;
+  color:#666;
+  font-family:sans-serif;
+}
+.recordTable td
+{
+  font-size:1.2em;
+  font-family:sans-serif;
+  padding-right:15px;
+  font-weight:bold;
+}
+.recordTable input
+{
+  width:40px;
+}
+.recordTable input.error
+{
+  border:2px solid red;
+}
+.saveBtn
+{
+  background-color:#e6e6e6;
+  color:#000;
+  border-radius:0;
+  height:30px;
+  border:1px solid #000;
+}

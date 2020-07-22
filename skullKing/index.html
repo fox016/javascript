@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"> 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@300;600;900&display=swap" rel="stylesheet">
+  <link rel='stylesheet' type='text/css' href='skullKing.css' />
+  <script type='text/javascript' src='skullKing.js'></script>
+</head>
+<body>
+
+<img id="skullKingImg" style="position:absolute; top:0; z-index:-1; opacity:0.2; width:250px; height:356.45px;" alt="Skull King" data-type="image" itemprop="image" src="https://static.wixstatic.com/media/524f08_78aebdb85f7740ca95128df99881b813~mv2_d_1456_2076_s_2.png">
+
+<div class='page' id='page1'>
+  <h1>How many players?</h1>
+  <div id='playerCountDiv'>
+    <div id='playerCount'>2</div>
+    <div>
+      <button class='playerBtn' id='addPlayer'>&uarr;</button><br/>
+      <button class='playerBtn' id='removePlayer'>&darr;</button>
+    </div>
+  </div>
+  <div class='nav'>
+    <div></div>
+    <button class='nextBtn'>Next &rarr;</button>
+    <div></div>
+  </div>
+</div>
+
+<div class='page' id='page2'>
+  <h1>Enter player names:</h1>
+  <div id='playerNameDiv'>
+  </div>
+  <div class='nav'>
+    <button class='prevBtn'>&larr;</button>
+    <button class='nextBtn'>&rarr;</button>
+  </div>
+</div>
+
+<div class='page' id='page3'>
+  <div id='players'>
+  </div>
+</div>
+
+</body>
+</html>
