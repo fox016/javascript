@@ -143,7 +143,7 @@ function refreshPlayers()
         let total = parseInt($(".playerScoreDisplay", $(table).closest(".player")).html());
         $(".currentRoundTotal", table).html(parseInt(s)+total);
       }
-      $("input", table).removeClass("error");
+      $(this).removeClass("error");
     });
     $(".saveBtn").unbind('click').click(function()
     {
@@ -171,16 +171,24 @@ function buildRound(table)
   };
 }
 
+function myParseInt(str)
+{
+  let myInt = parseInt(str);
+  if(isNaN(myInt))
+    return 0;
+  return myInt;
+}
+
 function isValidRound(round, table)
 {
   let isValid = true;
   $("input", table).removeClass("error");
-  if(round.bid < 0 || round.bid > round.round)
+  if(round.bid == "" || myParseInt(round.bid) < 0 || myParseInt(round.bid) > myParseInt(round.round))
   {
     $(".bidInput", table).addClass("error");
     isValid = false;
   }
-  if(round.actual < 0 || round.actual > round.round)
+  if(round.actual == "" || myParseInt(round.actual) < 0 || myParseInt(round.actual) > myParseInt(round.round))
   {
     $(".actualInput", table).addClass("error");
     isValid = false;
