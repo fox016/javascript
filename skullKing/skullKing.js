@@ -226,7 +226,7 @@ function getHistoryHtml(history)
               "</tr>" +
               "<tr>" +
                 "<th>Bonus</th>" +
-                "<td><input type='number' inputmode='numeric' pattern='[0-9]*' size='2' class='bonusInput' /></td>" +
+                "<td><input type='number' pattern='-?[0-9]*' size='2' class='bonusInput' /></td>" +
                 "<td colspan=2><button class='saveBtn'>Save Round</button></td>" +
               "</tr>" +
             "</tbody>" +
@@ -296,6 +296,8 @@ function getRoundScore(round)
       score = round.round * -10;
     else
       score = -10 * Math.abs(round.bid - round.actual);
+    if(round.bonus < 0)
+      score += round.bonus;
   }
   return score;
 }
