@@ -2,6 +2,9 @@ var current_page = 0;
 var players = [];
 var rounds = [];
 
+var _edit_player_name = null;
+var _edit_player_round = null;
+
 $(document).ready(function()
 {
   $(window).resize(resize);
@@ -184,18 +187,18 @@ function refreshPlayers(callback)
     });
     $(".editBtn").unbind('click').click(function()
     {
-      var playerName = $(".playerNameDisplay", $(this).closest(".player")).html();
-      let player = getPlayerByName(playerName);
-      var lastRound = player.history.pop();
-      player.score -= lastRound.score;
+      _edit_player_name = $(".playerNameDisplay", $(this).closest(".player")).html();
+      let player = getPlayerByName(_edit_player_name);
+      _edit_player_round = player.history.pop();
+      player.score -= _edit_player_round.score;
       refreshPlayers(function() {
         // Open player
-        let playerDiv = getPlayerDivByName(playerName);
+        let playerDiv = getPlayerDivByName(_edit_player_name);
         $(".playerHeader", playerDiv).trigger('click');
-        // Populate with lastRound data
-        $(".bidInput", playerDiv).val(lastRound.bid);
-        $(".actualInput", playerDiv).val(lastRound.actual);
-        $(".bonusInput", playerDiv).val(lastRound.bonus);
+        // Populate with _edit_player_round data
+        $(".bidInput", playerDiv).val(_edit_player_round.bid);
+        $(".actualInput", playerDiv).val(_edit_player_round.actual);
+        $(".bonusInput", playerDiv).val(_edit_player_round.bonus);
       });
     });
     callback();
