@@ -565,3 +565,58 @@ function playFurElise()
   ];
   playNotesInOrder(notes, 1500, 10);
 }
+
+function playHeIsRisenBass()
+{
+  let notes = [
+    {note: "C", octave: 4, beats: 0.375},
+    {note: "G", octave: 3, beats: 0.125},
+    {note: "C", octave: 4, beats: 0.25},
+    {note: "E", octave: 4, beats: 0.25},
+    {note: "A", octave: 4, beats: 0.25},
+    {note: "A", octave: 4, beats: 0.25},
+    {note: "G", octave: 4, beats: 0.25},
+    {note: "G", octave: 4, beats: 0.25},
+    {note: "A", octave: 4, beats: 0.25},
+    {note: "G", octave: 4, beats: 0.125},
+    {note: "F", octave: 4, beats: 0.125},
+    {note: "E", octave: 4, beats: 0.25},
+    {note: "C", octave: 4, beats: 0.25},
+    {note: "F", octave: 4, beats: 0.25},
+    {note: "G", octave: 4, beats: 0.25},
+    {note: "C", octave: 4, beats: 0.5}, // End 1st stanza
+    {note: "C", octave: 4, beats: 0.375},
+    {note: "G", octave: 3, beats: 0.125},
+    {note: "C", octave: 4, beats: 0.25},
+    {note: "E", octave: 4, beats: 0.25},
+    {note: "A", octave: 4, beats: 0.25},
+    {note: "A", octave: 4, beats: 0.25},
+    {note: "G", octave: 4, beats: 0.25},
+    {note: "G", octave: 4, beats: 0.25},
+    {note: "A", octave: 4, beats: 0.25},
+    {note: "G", octave: 4, beats: 0.125},
+    {note: "F", octave: 4, beats: 0.125},
+    {note: "E", octave: 4, beats: 0.25},
+    {note: "C", octave: 4, beats: 0.25},
+    {note: "F", octave: 4, beats: 0.25},
+    {note: "G", octave: 4, beats: 0.25},
+    {note: "C", octave: 4, beats: 0.5}, // End 2nd stanza
+    {note: "C", octave: 4, beats: 0.25},
+    {note: "E", octave: 4, beats: 0.125},
+    {note: "F", octave: 4, beats: 0.125},
+    {note: "G", octave: 4, beats: 0.25},
+    {note: "G", octave: 4, beats: 0.25},
+    {note: "A", octave: 4, beats: 0.25},
+    {note: "C", octave: 4, beats: 0.125},
+    {note: "D", octave: 4, beats: 0.125},
+    {note: "E", octave: 4, beats: 0.5},
+    {note: "F", octave: 4, beats: 0.25},
+    {note: "D", octave: 4, beats: 0.25},
+    {note: "E", octave: 4, beats: 0.25},
+    {note: "A", octave: 4, beats: 0.25},
+    {note: "F", octave: 4, beats: 0.25},
+    {note: "G", octave: 4, beats: 0.25},
+    {note: "C", octave: 4, beats: 0.5},
+  ];
+  playNotesInOrder(notes, 2200, 10);
+}

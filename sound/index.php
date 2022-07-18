@@ -112,6 +112,7 @@ function getVal($array, $index, $default=null)
       <button type='button' class='songBtn' onclick='playLeadKindlyLight()'>Lead Kindly Light</button>
       <button type='button' class='songBtn' onclick='playPraiseToTheManSimple()'>Praise to the Man</button>
       <button type='button' class='songBtn' onclick='playPraiseToTheManComplex()'>Praise to the Man (SA)</button>
+      <button type='button' class='songBtn' onclick='playHeIsRisenBass()'>He Is Risen (Bass)</button>
     </div>
     <div id='piano'>
       <?php foreach($notes as $i => $note) {
