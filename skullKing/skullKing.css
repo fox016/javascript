@@ -146,3 +146,28 @@ input.playerName.error
   height:30px;
   border:1px solid #000;
 }
+#page3Content
+{
+  font-size:32px;
+  font-family:"Grenze Gotisch",serif;
+  color: #F9E230;
+  text-shadow: 2px 3px 4px #282828;
+  margin:0px auto;
+}
+.roundSizeInput
+{
+  width:40px;
+  text-align:center;
+}
+table#configureRoundsTable {
+  margin:0px auto;
+  text-align:center;
+}
+table#configureRoundsTable thead th {
+  font-weight:normal;
+  padding:0 15px;
+}
+.cardCountRow th {
+  color:#333;
+  font-weight:bold;
+}

@@ -1,5 +1,6 @@
 var current_page = 0;
 var players = [];
+var rounds = [];
 
 $(document).ready(function()
 {
@@ -66,18 +67,29 @@ function setPage(page)
     let html = "";
     if(nameCount < count)
     {
-      for(i = nameCount; i < count; i++)
+      for(let i = nameCount; i < count; i++)
       {
         $("#playerNameDiv").append("<input class='playerName' type='text' />");
       }
     }
     else if(nameCount > count)
     {
-      for(i = 0; i < nameCount - count; i++)
+      for(let i = 0; i < nameCount - count; i++)
         $("#playerNameDiv .playerName:last-child").remove();
     }
   }
-  else if(page == 3)
+  if(page == 3)
+  {
+    let defaultRoundCount = 10;
+    for(let i = 1; i <=15; i++) {
+      $("#roundCount").append("<option value='"+i+"' " + (i==defaultRoundCount ? "SELECTED" : "") + ">"+i+"</option>");
+    }
+    setRounds(defaultRoundCount);
+    $("#roundCount").unbind().change(function() {
+      setRounds($(this).val());
+    });
+  }
+  else if(page == 4)
   {
     players = [];
     $(".playerName").each(function()
@@ -88,6 +100,15 @@ function setPage(page)
         history: [],
       });
     });
+
+    rounds = [];
+    $(".roundSizeInput").each(function(index, element)
+    {
+      rounds.push({
+        count: myParseInt($(this).val()),
+      });
+    });
+
     refreshPlayers();
   }
 
@@ -163,11 +184,13 @@ function refreshPlayers()
 
 function buildRound(table)
 {
+  let roundNum = parseInt($(".historyRound", $(table).closest(".historyItem")).html());
   return {
     bid: $(".bidInput", table).val(),
     actual: $(".actualInput", table).val(),
     bonus: $(".bonusInput", table).val(),
-    round: $(".historyRound", $(table).closest(".historyItem")).html(),
+    cards: rounds[roundNum-1].count,
+    round: roundNum,
   };
 }
 
@@ -183,12 +206,12 @@ function isValidRound(round, table)
 {
   let isValid = true;
   $("input", table).removeClass("error");
-  if(round.bid == "" || myParseInt(round.bid) < 0 || myParseInt(round.bid) > myParseInt(round.round))
+  if(round.bid == "" || myParseInt(round.bid) < 0 || myParseInt(round.bid) > myParseInt(round.cards))
   {
     $(".bidInput", table).addClass("error");
     isValid = false;
   }
-  if(round.actual == "" || myParseInt(round.actual) < 0 || myParseInt(round.actual) > myParseInt(round.round))
+  if(round.actual == "" || myParseInt(round.actual) < 0 || myParseInt(round.actual) > myParseInt(round.cards))
   {
     $(".actualInput", table).addClass("error");
     isValid = false;
@@ -212,6 +235,10 @@ function getHistoryHtml(history)
         "<div class='historyRecord'>" +
           "<table class='recordTable'>" +
             "<tbody>" +
+              "<tr class='cardCountRow'>" +
+                "<th colspan=2>Cards:</th>" +
+                "<th colspan=2>" + rounds[history.length].count + "</th>" +
+              "</tr>" +
               "<tr>" +
                 "<th>Bid</th>" +
                 "<td><input type='number' inputmode='numeric' pattern='[0-9]*' size='2' class='bidInput' /></td>" +
@@ -226,7 +253,7 @@ function getHistoryHtml(history)
               "</tr>" +
               "<tr>" +
                 "<th>Bonus</th>" +
-                "<td><input type='number' pattern='-?[0-9]*' size='2' class='bonusInput' /></td>" +
+                "<td><input type='number' size='3' class='bonusInput' /></td>" +
                 "<td colspan=2><button class='saveBtn'>Save Round</button></td>" +
               "</tr>" +
             "</tbody>" +
@@ -246,6 +273,10 @@ function getHistoryHtml(history)
         "<div class='historyRecord'>" +
           "<table class='recordTable'>" +
             "<tbody>" +
+              "<tr class='cardCountRow'>" +
+                "<th colspan=2>Cards:</th>" +
+                "<th colspan=2>" + rounds[h.round-1].count + "</th>" +
+              "</tr>" +
               "<tr>" +
                 "<th>Bid</th>" +
                 "<td>" + h.bid + "</td>" +
@@ -277,23 +308,20 @@ function getRoundScore(round)
   let score = 0;
   if(round.bid === "" || round.actual === "")
     return "";
-  round.bid = parseInt(round.bid);
-  round.actual = parseInt(round.actual);
-  round.bonus = parseInt(round.bonus);
-  if(isNaN(round.bonus))
-    round.bonus = 0;
-  round.round = parseInt(round.round);
-  if(round.bid == round.actual)
+  round.bid = myParseInt(round.bid);
+  round.actual = myParseInt(round.actual);
+  round.bonus = myParseInt(round.bonus);
+  if(round.bid == round.actual) // If bid is met
   {
     if(round.bid == 0)
-      score = round.round * 10 + round.bonus;
+      score = round.cards * 10 + round.bonus;
     else
       score = round.actual * 20 + round.bonus;
   }
-  else
+  else // If bid is NOT met
   {
     if(round.bid == 0)
-      score = round.round * -10;
+      score = round.cards * -10;
     else
       score = -10 * Math.abs(round.bid - round.actual);
     if(round.bonus < 0)
@@ -323,4 +351,19 @@ function resize()
       left: parseInt(width.replace("px", ""))/2-($("#skullKingImg").width()/2) + "px"
     });
   });
+}
+
+function setRounds(roundCount)
+{
+  let rows = [];
+  for(let i = 0; i < roundCount; i++)
+  {
+    rows.push("<tr><td>" + (i+1) + "</td>" +
+      "<td>" +
+        "<input class='roundSizeInput' type='number' inputmode='numeric' pattern='[0-9]*' size=2 value=" + (i+1) + ">" +
+      "</td>" +
+      "</tr>"
+    );
+  }
+  $("#configureRoundsTable tbody").html(rows);
 }
