@@ -119,8 +119,11 @@ function setPage(page)
   resize();
 }
 
-function refreshPlayers()
+function refreshPlayers(callback)
 {
+  if(typeof callback !== "function")
+    callback = function(){};
+
   let html = "";
   for(let i = 0; i < players.length; i++)
   {
@@ -174,10 +177,28 @@ function refreshPlayers()
       if(isValidRound(round, table))
       {
         player.score = parseInt($(".currentRoundTotal", table).html());
+        round.score = parseInt($(".currentRoundScore", table).html());
         player.history.push(round);
         refreshPlayers();
       }
     });
+    $(".editBtn").unbind('click').click(function()
+    {
+      var playerName = $(".playerNameDisplay", $(this).closest(".player")).html();
+      let player = getPlayerByName(playerName);
+      var lastRound = player.history.pop();
+      player.score -= lastRound.score;
+      refreshPlayers(function() {
+        // Open player
+        let playerDiv = getPlayerDivByName(playerName);
+        $(".playerHeader", playerDiv).trigger('click');
+        // Populate with lastRound data
+        $(".bidInput", playerDiv).val(lastRound.bid);
+        $(".actualInput", playerDiv).val(lastRound.actual);
+        $(".bonusInput", playerDiv).val(lastRound.bonus);
+      });
+    });
+    callback();
   });
   resize();
 }
@@ -227,7 +248,7 @@ function isValidRound(round, table)
 function getHistoryHtml(history)
 {
   let html = "";
-  if(history.length < 10)
+  if(history.length < rounds.length)
   {
     html += "" +
       "<div class='historyItem'>" +
@@ -292,8 +313,7 @@ function getHistoryHtml(history)
               "<tr>" +
                 "<th>Bonus</th>" +
                 "<td>" + h.bonus + "</td>" +
-                "<td></td>" +
-                "<td></td>" +
+                "<td colspan=2>" + (i == history.length -1 ? "<button class='editBtn'>Edit</button>" : "") + "</td>" +
               "</tr>" +
             "</tbody>" +
           "</table>" +
@@ -340,6 +360,18 @@ function getPlayerByName(name)
   return null;
 }
 
+function getPlayerDivByName(name)
+{
+  let playerDiv = null;
+  $(".player").each(function() {
+    if($(".playerNameDisplay", this).html() == name) {
+      playerDiv = this;
+      return false;
+    }
+  });
+  return playerDiv;
+}
+
 function resize()
 {
   let width = $(window).width() + "px";
@@ -366,4 +398,5 @@ function setRounds(roundCount)
     );
   }
   $("#configureRoundsTable tbody").html(rows);
+  resize();
 }

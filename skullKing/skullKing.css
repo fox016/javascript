@@ -138,7 +138,7 @@ input.playerName.error
 {
   border:2px solid red;
 }
-.saveBtn
+.saveBtn, .editBtn
 {
   background-color:#e6e6e6;
   color:#000;
